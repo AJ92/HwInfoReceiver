@@ -23,13 +23,14 @@ import java.util.List;
 import com.threedevs.aj.HwInfoReceiver.Database.DataBaseHandle;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
 import com.threedevs.aj.HwInfoReceiver.Networking.NetworkTask;
+import com.threedevs.aj.HwInfoReceiver.Networking.Networker;
 
 import static com.threedevs.aj.HwInfoReceiver.R.*;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private NetworkTask networktask = null;
+    private Networker networker = null;
     private DataBaseHandle db;
     private List<String> ip_list;
     private List<String> hostname_list;
@@ -65,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         // connect to the server
 
 
-        networktask = ((CustomApplication)getApplication()).getNetworkTask();
+        networker = ((CustomApplication)getApplication()).getNetworker();
     }
 
 
@@ -149,7 +150,9 @@ public class MainActivity extends ActionBarActivity {
     public void connectToServer(int index){
         String ip = ip_list.get(index);
         //hostname_list.get(index);
-        networktask = ((CustomApplication)getApplication()).createNetworkTask(ip);
+        networker = ((CustomApplication)getApplication()).createNetworker(ip);
+
+        ((CustomApplication)getApplication()).setIP(ip);
 
         Intent si = new Intent(MainActivity.this, ServerActivity.class);
         si.putExtra("ip", ip); //Optional parameters
@@ -229,10 +232,15 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void dropdb(View v){
+        db = new DataBaseHandle(getApplicationContext());
+        db.drop();
+    }
+
 
     public void sendSensorRequest(int sensor_id){
-        if(networktask != null) {
-            networktask.SendDataToNetwork("get::" + Integer.toString(sensor_id) + ";");
+        if(networker != null) {
+            networker.SendDataToNetwork("get::" + Integer.toString(sensor_id) + ";");
             showToast("requesting " + Integer.toString(sensor_id));
         }
     }

@@ -21,8 +21,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
             <ImageButton
-                android:layout_width="42dp"
+                android:layout_width="62dp"
                 android:layout_height="42dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
@@ -31,9 +35,33 @@
                 android:contentDescription="@string/desc_add_new_server"
                 android:src="@android:drawable/ic_menu_add"
                 android:background="@android:color/transparent"
-                android:onClick="addServerToList" />
+                android:onClick="addSensor" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/textView"
+                android:layout_column="0" />
+
+            </LinearLayout>
 
         </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listView"
+                android:layout_column="0"
+                android:layout_span="1" />
+
+        </TableRow>
+
     </TableLayout>
 
 </RelativeLayout>

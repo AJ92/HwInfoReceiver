@@ -51,10 +51,10 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Request"
+                android:text="DROP DB"
                 android:id="@+id/button_request"
                 android:layout_column="0"
-                android:onClick="updateSensors" />
+                android:onClick="dropdb" />
         </TableRow>
 
         <TableRow

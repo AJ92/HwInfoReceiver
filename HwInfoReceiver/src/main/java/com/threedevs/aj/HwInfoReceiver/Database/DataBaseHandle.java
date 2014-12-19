@@ -117,6 +117,13 @@ public class DataBaseHandle extends SQLiteOpenHelper {
     }
 
 
+    public void drop(){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        Log.i(TAG,"drop dat db like its hot...");
+
+        onCreate(sqLiteDatabase);
+    }
 
     //ops on database (insert, delete, update, bla bla ...)
 
@@ -310,6 +317,7 @@ public class DataBaseHandle extends SQLiteOpenHelper {
                 sensors.add(sensor);
             } while (c.moveToNext());
         }
+        Log.i(TAG, "found " + sensors.size() + " entries." );
         return sensors;
     }
 
@@ -343,6 +351,48 @@ public class DataBaseHandle extends SQLiteOpenHelper {
     }
 
 
+    public Server getServerByIP(String ip) {
+        Server server = null;
+
+        String selectQuery = "SELECT  * FROM " + TABLE_SERVERS + " WHERE " + KEY_IP + " = '" + ip + "'";
+
+        Log.i(TAG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Server server_tmp = new Server(c.getLong((c.getColumnIndex(KEY_ID))),
+                        c.getString((c.getColumnIndex(KEY_IP))),
+                        c.getString((c.getColumnIndex(KEY_HOSTNAME))));
+
+                // adding to sensor list
+                server = server_tmp;
+            } while (c.moveToNext());
+        }
+        return server;
+    }
+
+    public long getServerSensorIDBySensorID(long id) {
+        long serversensorid = -1;
+
+        String selectQuery = "SELECT " + KEY_ID +  " FROM " + TABLE_SERVER_SENSOR + " WHERE " + KEY_SENSORID + " = '" + id + "'";
+
+        Log.i(TAG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                serversensorid = c.getLong((c.getColumnIndex(KEY_ID)));
+            } while (c.moveToNext());
+        }
+        return serversensorid;
+    }
 
 
     // closing database

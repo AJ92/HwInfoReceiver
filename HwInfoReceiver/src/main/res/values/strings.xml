@@ -27,4 +27,17 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
 
+
+    <string-array name="sensor_list_menu">
+        <item>Settings</item>
+        <item>Delete</item>
+    </string-array>
+
+
+    <string name="sensor_index">ID</string>
+    <string name="sensor_save">Save</string>
+    <string name="sensor_cancel">Cancel</string>
+
+    <string name="server_status">Status</string>
+
 </resources>

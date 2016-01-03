@@ -32,6 +32,8 @@ public class SensorDialog extends DialogFragment {
     private long sensor_id;
     private int value = 0;
 
+    private boolean success = false;
+
     public SensorDialog(long sensor_id, int value){
         this.sensor_id = sensor_id;
         this.value = value;
@@ -68,6 +70,7 @@ public class SensorDialog extends DialogFragment {
                 .setPositiveButton(R.string.sensor_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        success = true;
                         mListener.onDialogPositiveClick(SensorDialog.this);
                     }
                 })
@@ -99,4 +102,6 @@ public class SensorDialog extends DialogFragment {
     public int getSensorIndex(){
         return np.getValue();
     }
+
+    public boolean isSuccess(){ return success;}
 }

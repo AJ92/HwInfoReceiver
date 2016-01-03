@@ -1,6 +1,10 @@
 package com.threedevs.aj.HwInfoReceiver;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,6 +30,8 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -67,12 +73,34 @@ public class Gauge extends View {
 
     private Bitmap background; // holds the cached static part
 
-    // scale configuration
-    private static final int totalNicks = 100;
-    private static final float degreesPerNick = 360.0f / totalNicks;
-    private static final int centerValue = 40; // the one in the top center (12 o'clock)
-    private static final int minValue= -30;
-    private static final int maxValue = 110;
+    // scale configuration (both not needed)
+    private int totalNicks = 100;
+    private float degreesPerNick = 360.0f / totalNicks;
+
+
+    //not needed
+    private float centerValue = 70; // the one in the top center (12 o'clock)
+
+
+
+
+
+    private float minValue= -1;
+    private float maxValue = 1;
+
+
+
+    //new scale config
+    private int span_degrees = 240;     // should stay under 360°
+    private int values = 100;
+    private int values_labeled = 10;
+    private float degrees_per_value = ((float)span_degrees) / ((float)values);
+    private float degrees_per_value_labeled = ((float)span_degrees) / ((float)values_labeled);
+    private float start_span_degree = (-(float)span_degrees) / 2.0f;
+
+    DecimalFormat df;
+
+
 
     // hand dynamics -- all are angular expressed in F degrees
     private boolean handInitialized = false;
@@ -82,8 +110,20 @@ public class Gauge extends View {
     private float handAcceleration = 0.0f;
     private long lastHandMoveTime = -1L;
 
+
+    private String title = "new";
+
+
+    //prefered View size
+    public static final int preferedSize = 350;
+
+
+
+    private GestureDetector mDetector;
+
     public Gauge(Context context) {
         super(context);
+        init();
     }
 
     public Gauge(Context context, AttributeSet attrs) {
@@ -95,6 +135,14 @@ public class Gauge extends View {
         super(context, attrs, defStyle);
         init();
     }
+
+    public void setTitle(String title){
+        if(!this.title.equals(title)) {
+            this.title = title;
+            regenerateBackground();
+        }
+    }
+
 
 
     @Override
@@ -139,17 +187,27 @@ public class Gauge extends View {
     }
 
     private void init() {
+
+        df = new DecimalFormat("#.", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+        df.setMaximumFractionDigits(2);
+
+
+        class mListener extends GestureDetector.SimpleOnGestureListener {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+        }
+        mDetector = new GestureDetector(Gauge.this.getContext(), new mListener());
+
         handler = new Handler();
-
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
         setHandTarget(50);
-
         initDrawingTools();
     }
 
     private String getTitle() {
-        return "CPU temp °C";
+        return title;
     }
 
 
@@ -162,6 +220,24 @@ public class Gauge extends View {
     private void detachFromSensor() {
         //TODO:
         //detach from sensor...
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+
+        boolean result = mDetector.onTouchEvent(event);
+        if (!result) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Random rn = new Random();
+                int value = rn.nextInt(Math.abs((int)minValue) + Math.abs((int)maxValue)) - Math.abs((int)minValue);
+                Log.e(TAG, "RANDOM VALUE: " + value);
+                setHandTarget(value);
+                result = true;
+            }
+        }
+        return result;
+
     }
 
     private void initDrawingTools() {
@@ -296,7 +372,7 @@ public class Gauge extends View {
 
     // in case there is no size specified
     private int getPreferredSize() {
-        return 300;
+        return preferedSize;
     }
 
     private void drawRim(Canvas canvas) {
@@ -311,21 +387,76 @@ public class Gauge extends View {
         // draw the inner rim circle
         canvas.drawOval(faceRect, rimCirclePaint);
         // draw the rim shadow inside the face
-        canvas.drawOval(faceRect, rimShadowPaint);
+        if(!isInEditMode()) {
+            canvas.drawOval(faceRect, rimShadowPaint);
+        }
     }
 
     private void drawScale(Canvas canvas) {
+
+        Log.e(TAG, "drawScale");
+
         canvas.drawOval(scaleRect, scalePaint);
 
         canvas.save(Canvas.MATRIX_SAVE_FLAG);
+
+
+        //new scale draw code...
+
+        canvas.rotate(start_span_degree, 0.5f, 0.5f);
+
+        for (int i = 0; i < values; ++i){
+
+            float y1 = scaleRect.top;
+            float y2 = y1 - 0.020f;
+            canvas.drawLine(0.5f, y1, 0.5f, y2, scalePaint);
+            canvas.rotate(degrees_per_value, 0.5f, 0.5f);
+        }
+
+
+
+
+        canvas.restore();
+        canvas.save(Canvas.MATRIX_SAVE_FLAG);
+
+
+
+        canvas.rotate(start_span_degree, 0.5f, 0.5f);
+
+        for (int i = 0; i < values_labeled; ++i){
+            float y1 = scaleRect.top;
+            float y2 = y1 - 0.020f;
+
+
+            String valueString = nickToValue(i);
+            canvas.drawText(valueString, 0.5f, y2 - 0.015f, scalePaint);
+
+
+            canvas.rotate(degrees_per_value_labeled, 0.5f, 0.5f);
+        }
+
+
+        /*
+        int nicks = (int) (totalNicks / 100.0);
+        if(nicks == 0){
+            nicks = 1;
+        }
+        int nicks_label = (int) (totalNicks / 20.0);
+        if(nicks_label == 0){
+            nicks_label = 1;
+        }
+
         for (int i = 0; i < totalNicks; ++i) {
             float y1 = scaleRect.top;
             float y2 = y1 - 0.020f;
 
-            canvas.drawLine(0.5f, y1, 0.5f, y2, scalePaint);
+            if(i % nicks == 0)
+                canvas.drawLine(0.5f, y1, 0.5f, y2, scalePaint);
 
-            if (i % 10 == 0) {
+            if (i % nicks_label == 0) {
                 int value = nickToDegree(i);
+
+                Log.e(TAG, "nickToDegree: " + value);
 
                 if (value >= minValue && value <= maxValue) {
                     String valueString = Integer.toString(value);
@@ -333,20 +464,43 @@ public class Gauge extends View {
                     Log.d(TAG, "scale: " + valueString);
                 }
             }
-
             canvas.rotate(degreesPerNick, 0.5f, 0.5f);
         }
+        */
+
+
+
         canvas.restore();
     }
 
+    private String nickToValue(int nick){
+        float value;
+        value = ((maxValue - minValue) / ((float)values_labeled)) * ((float)nick) + minValue;
+        return df.format(value);
+    }
+
+
     private int nickToDegree(int nick) {
         int rawDegree = ((nick < totalNicks / 2) ? nick : (nick - totalNicks)) * 2;
-        int shiftedDegree = rawDegree + centerValue;
+        int shiftedDegree = (int)(rawDegree + centerValue);
         return shiftedDegree;
     }
 
     private float degreeToAngle(float degree) {
         return (degree - centerValue) / 2.0f * degreesPerNick;
+    }
+
+    private float valueToAngle(float value) {
+        float angle;
+
+        float dist_to_zero = 0 - minValue;
+        float value_range = maxValue - minValue;
+
+        float shifted_value = value + dist_to_zero;
+
+        angle = (((float)(span_degrees)) * (shifted_value / value_range))
+                + start_span_degree;
+        return angle;
     }
 
     private void drawTitle(Canvas canvas) {
@@ -380,7 +534,10 @@ public class Gauge extends View {
             String valueString = Double.toString(handPosition);
             Log.d(TAG, "hand pos: " + valueString);
 
-            float handAngle = degreeToAngle(handPosition);
+            //float handAngle = degreeToAngle(handPosition);
+
+            float handAngle = valueToAngle(handPosition);
+
             String valueString2 = Double.toString(handAngle);
             Log.d(TAG, "hand angle: " + valueString2);
 
@@ -458,7 +615,7 @@ public class Gauge extends View {
 
             float direction = Math.signum(handVelocity);
             if (Math.abs(handVelocity) < 90.0f) {
-                handAcceleration = 5.0f * (handTarget - handPosition);
+                handAcceleration = 10.0f * (handTarget - handPosition);
             } else {
                 handAcceleration = 0.0f;
             }
@@ -521,4 +678,26 @@ public class Gauge extends View {
         handInitialized = true;
         invalidate();
     }
+
+
+    public void setMinValue(int value){
+        if(value < minValue) {
+            minValue = value;
+            recalcScale();
+        }
+    }
+
+    public void setMaxValue(int value){
+        if(value > maxValue) {
+            maxValue = value;
+            recalcScale();
+        }
+    }
+
+    public void recalcScale(){
+        centerValue = ((Math.abs(minValue) + Math.abs(maxValue)) / 2) - minValue;
+
+        regenerateBackground();
+    }
+
 }

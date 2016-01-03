@@ -76,7 +76,7 @@ public class NetworkTask extends AsyncTask<Void, byte[], Boolean> {
     }
 
 
-    public void SendDataToNetwork(String cmd) { //You run this from the main thread.
+    public void SendDataToNetwork(String cmd) { //You run this from the menu_main thread.
         try {
             if (nsocket.isConnected()) {
                 Log.i("AsyncTask", "SendDataToNetwork: Writing received message to socket");

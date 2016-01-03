@@ -1,10 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_add_server"
-        android:title="@string/action_addserver"
-        android:showAsAction="ifRoom"/>
-    <item android:id="@+id/menu_disconnect_from_server"
-        android:title="@string/action_disconnectfromserver" />
-</menu>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivity" >
 
-    <!--android:icon="@drawable/ic_new_game"-->
+    <item android:id="@+id/action_add_sensor"
+        android:icon="@drawable/add_sensor"
+        android:title="@string/action_addsensor"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+</menu>

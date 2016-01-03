@@ -44,10 +44,12 @@ public class Networker extends Thread {
             ArrayList<String> copied_messages = new ArrayList<String>();
             for(int i = 0; i < messages.size(); i++){
                 String line = messages.get(i);
-                //line might contain multiple messages... split em...
-                String[] lines = line.split(";");
-                for(int j = 0; j < lines.length; j++){
-                    copied_messages.add(lines[j]);
+                if(line != null) {
+                    //line might contain multiple messages... split em...
+                    String[] lines = line.split(";");
+                    for (int j = 0; j < lines.length; j++) {
+                        copied_messages.add(lines[j]);
+                    }
                 }
             }
             updateResultsInUi(copied_messages);
@@ -131,7 +133,7 @@ public class Networker extends Thread {
     }
 
 
-    public void SendDataToNetwork(String cmd) { //You run this from the main thread.
+    public void SendDataToNetwork(String cmd) { //You run this from the menu_main thread.
         try {
             if (nsocket.isConnected()) {
                 Log.i(TAG, "SendDataToNetwork: Writing received message to socket");

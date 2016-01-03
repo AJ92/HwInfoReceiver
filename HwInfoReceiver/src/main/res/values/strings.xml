@@ -3,6 +3,8 @@
 
     <string name="app_name">HwInfoReceiver</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_addsensor">Add Sensor</string>
+    <string name="action_cleardatabase">Clear Database</string>
     <string name="action_addserver">Add Server</string>
     <string name="action_editserver">Edit Server</string>
     <string name="action_removeserver">Remove Server</string>

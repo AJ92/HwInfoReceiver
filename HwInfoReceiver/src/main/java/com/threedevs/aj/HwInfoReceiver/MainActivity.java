@@ -2,6 +2,7 @@ package com.threedevs.aj.HwInfoReceiver;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -22,13 +23,12 @@ import java.util.List;
 
 import com.threedevs.aj.HwInfoReceiver.Database.DataBaseHandle;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
-import com.threedevs.aj.HwInfoReceiver.Networking.NetworkTask;
 import com.threedevs.aj.HwInfoReceiver.Networking.Networker;
 
 import static com.threedevs.aj.HwInfoReceiver.R.*;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ServerDialog.ServerDialogListener {
 
     private Networker networker = null;
     private DataBaseHandle db;
@@ -44,15 +44,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
 
-
         et = (EditText) this.findViewById(id.editText);
         //we do not check if it is an ip ... we asume the user is smart enough to use one !
         //String ip = et.getText().toString();
 
-
         lv = (ListView) this.findViewById(id.listView);
-
-
 
         refillList();
 
@@ -61,11 +57,7 @@ public class MainActivity extends ActionBarActivity {
         db.createServer(server1);
         */
 
-
-
-        // connect to the server
-
-
+        // get the networker...
         networker = ((CustomApplication)getApplication()).getNetworker();
     }
 
@@ -164,9 +156,8 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -177,6 +168,14 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_add_server) {
+            showNoticeDialog();
+            return true;
+        }
+        if (id == R.id.action_clear_database) {
+            dropdb(null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -192,10 +191,10 @@ public class MainActivity extends ActionBarActivity {
         super.onStop();
     }
 
-    public void showPopup(View v) {
+    public void showPopupServerAdd(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(menu.menu_server, popup.getMenu());
+        inflater.inflate(menu.menu_server_add, popup.getMenu());
         popup.show();
     }
 
@@ -211,44 +210,33 @@ public class MainActivity extends ActionBarActivity {
     public void addServerToList(View v) {
         //we do not check if it is an ip ... we asume the user is smart enough to use one !
         String ip = et.getText().toString();
-
         addToList(ip);
-
-
-        /*
-        Gauge g  = (Gauge) this.findViewById(id.gauge);
-        g.setHandTarget(-20.0f);
-        */
-
-
-    }
-
-
-
-
-
-    public void updateSensors(View v){
-        sendSensorRequest(31);
-
     }
 
     public void dropdb(View v){
         db = new DataBaseHandle(getApplicationContext());
         db.drop();
+        refillList();
+    }
+
+    public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new ServerDialog();
+        dialog.show(getSupportFragmentManager(), "ServerDialog");
     }
 
 
-    public void sendSensorRequest(int sensor_id){
-        if(networker != null) {
-            networker.SendDataToNetwork("get::" + Integer.toString(sensor_id) + ";");
-            showToast("requesting " + Integer.toString(sensor_id));
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        ServerDialog sd = (ServerDialog) dialog;
+        //check if it was successful
+        if(((ServerDialog) dialog).isSuccess()) {
+            addToList(sd.getAddress());
         }
     }
 
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
 
-
-
-
-
-
+    }
 }

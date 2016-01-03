@@ -5,18 +5,27 @@ import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.internal.widget.AdapterViewCompat;
+import android.support.v7.widget.GridLayout;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.threedevs.aj.HwInfoReceiver.CardLayout.LazyAdapter;
+import com.threedevs.aj.HwInfoReceiver.CardLayout.RowItem;
 import com.threedevs.aj.HwInfoReceiver.Database.DataBaseHandle;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Sensor;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
@@ -25,24 +34,51 @@ import com.threedevs.aj.HwInfoReceiver.Networking.Networker;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.format;
+
 
 public class ServerActivity extends ActionBarActivity implements SensorDialog.SensorDialogListener{
+
+
+    //UI TEST
+    private List<RowItem> rowItems;
+
+
+
+
 
     private Networker networker = null;
     private DataBaseHandle db;
 
-    Server server;
+    Server server = null;
     String server_ip = null;
 
     List<Sensor> sensors = new ArrayList<Sensor>();
-    List<String> sensor_strings;
+    List<String> sensor_strings = new ArrayList<String>();
+
+    List<CustomGauge> sensor_gauges = new ArrayList<CustomGauge>();
+    List<GaugeData> sensor_gaugedatas = new ArrayList<GaugeData>();
+
+
+    //keep track of all gauges...
+
 
     private String TAG = "ServerActivity";
 
-    private ListView lv;
     private TextView tv;
 
+    float dpHeight = 0.0f;
+    float dpWidth = 0.0f;
+    float dpDensitiy = 0.0f;
+
+    float viewHeight = 0;
+    float viewWidth = 0;
+
+    int tempID = 0;
+
     private long timer_delay = 2000;
+
+    private LazyAdapter adapter;
 
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -72,7 +108,7 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
                             try {
                                 String sensor_id = message_split[1];
                                 long id = Long.parseLong(sensor_id, 10);
-                                setSensorString(id,msg);
+                                updateSensorData(id, msg);
                             }catch (Exception e){
                                 Log.e(TAG, e.toString());
                             }
@@ -92,12 +128,27 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server);
+        //setContentView(R.layout.activity_server);
 
 
-        lv = (ListView) this.findViewById(R.id.listView);
+        LayoutInflater inf = getLayoutInflater();
+        RelativeLayout view = (RelativeLayout) inf.inflate(R.layout.activity_server, null);
+        setContentView(view);
 
-        tv = (TextView) this.findViewById(R.id.textView);
+
+        //get screen dimensions in dp
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
+        dpDensitiy = displayMetrics.density;
+
+        viewHeight = view.getHeight();
+        viewWidth = view.getWidth();
+
+
 
 
         if (savedInstanceState == null) {
@@ -109,7 +160,7 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
             }
         } else {
             server_ip= (String) savedInstanceState.getSerializable("ip");
-            tv.setText("Server ip: " + server_ip);
+            setTitle("Server ip: " + server_ip);
         }
 
         //if screen rotated or shit... no intent is fired but we stored the ip in global context...
@@ -128,18 +179,83 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
             server = db.getServerByIP(server_ip);
             if(server != null){
                 showToast("Server found in DB");
-                tv.setText("Server connected:   ip: " + server_ip + " id: " + server.getId());
+                setTitle("Server ip: " + server_ip + " id: " + server.getId());
             }
         }
 
         networker = ((CustomApplication)getApplication()).getNetworker();
 
+        reLoadSensorsFromDataBase();
 
-        refillList();
+        //build layout
+        buildLayout();
 
         //start dat timer :)
         timerHandler.postDelayed(timerRunnable, 0);
     }
+
+
+    //build / rebuild the layout!
+    private void buildLayout(){
+
+        GridLayout gl = (GridLayout) findViewById(R.id.gridLayout);
+
+        if(gl != null){
+            showToast("bulding GridLayout");
+            gl.removeAllViews();
+
+
+            rowItems = new ArrayList<RowItem>();
+
+            //add all gauges...
+            for(GaugeData gd : sensor_gaugedatas){
+
+
+                RowItem item = new RowItem((float) gd.getValueMin(),(float) gd.getValueMax(),(float) gd.getValue(),gd.getUnit(),gd.getName(),gd.getPrecision());
+                item.setAttrib1(gd.getValueMin() + " " + gd.getUnit());
+                item.setAttrib2(gd.getValue() + " " + gd.getUnit());
+                item.setAttrib3(gd.getValueMax() + " " + gd.getUnit());
+
+                rowItems.add(item);
+            }
+
+
+            ListView lv = (ListView) findViewById(R.id.myList);
+
+            // Set the adapter on the ListView
+            adapter = new LazyAdapter(getApplicationContext(), R.layout.list_row, rowItems);
+            lv.setAdapter(adapter);
+
+            adapter.notifyDataSetChanged();
+
+            lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+
+            //add Spaces... ???
+            //not yet...
+
+
+            registerForContextMenu(lv);
+
+        }
+
+
+
+    }
+
 
 
     @Override
@@ -158,19 +274,20 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
     }
 
 
+
     //ListViews context Menu...
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listView) {
+        if (v.getId()==R.id.myList) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             menu.setHeaderTitle("Sensor: " + sensors.get(info.position).getId());
             String[] menuItems = getResources().getStringArray(R.array.sensor_list_menu);
             for (int i = 0; i<menuItems.length; i++) {
                 menu.add(Menu.NONE, i, i, menuItems[i]);
             }
-
         }
     }
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -196,9 +313,11 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
     }
 
 
-    public void refillList(){
+    public void reLoadSensorsFromDataBase(){
         sensors = new ArrayList<Sensor>();
         sensor_strings = new ArrayList<String>();
+        sensor_gauges = new ArrayList<CustomGauge>();
+        sensor_gaugedatas = new ArrayList<GaugeData>();
 
         //database
         db = new DataBaseHandle(getApplicationContext());
@@ -210,12 +329,8 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
 
         for(int i = 0; i < sensors.size(); i++){
             sensor_strings.add(Long.toString(sensors.get(i).getIndex()));
+            sensor_gaugedatas.add(new GaugeData());
         }
-
-        ListAdapter listenAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sensor_strings);
-        lv.setAdapter(listenAdapter);
-        registerForContextMenu(lv);
-
     }
 
 
@@ -223,7 +338,7 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.server, menu);
+        getMenuInflater().inflate(R.menu.menu_server, menu);
         return true;
     }
 
@@ -234,6 +349,10 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_add_sensor) {
+            addSensor(null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -251,14 +370,15 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
         if(server != null){
             //database
             db = new DataBaseHandle(getApplicationContext());
-            Sensor sensor = new Sensor(1);
+            Sensor sensor = new Sensor(tempID);
             long sensor_id = db.createSensor(sensor);
-
-            sensor_strings.add(Long.toString(sensor_id));
 
             db.createServerSensor(server.getId(), sensor_id);
         }
-        refillList();
+
+        reLoadSensorsFromDataBase();
+
+        buildLayout();
     }
 
 
@@ -277,11 +397,13 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
         }
         db.deleteSensor(sensor_id);
 
-        refillList();
+        reLoadSensorsFromDataBase();
+
+        buildLayout();
     }
 
 
-    private void setSensorString(long index, String message){
+    private void updateSensorData(long index, String message){
         for(int i = 0; i < sensors.size(); i++){
             if(sensors.get(i).getIndex() == index){
 
@@ -292,31 +414,60 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
 
                     if(split_message[0].equals("reading")) {
 
+                        //update string
                         String value = "";
-
                         value = value + split_message[2] + ": " + split_message[3] + " " + split_message[4];
-
                         sensor_strings.set(i, value);
-                        ListAdapter listenAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sensor_strings);
-                        lv.setAdapter(listenAdapter);
-                        registerForContextMenu(lv);
 
+                        //update GaugeData
+                        GaugeData gd = sensor_gaugedatas.get(i);
+                        gd.setName(split_message[2]);
+                        gd.setUnit(split_message[4]);
+                        try {
+                            double value_double = Double.parseDouble(split_message[3]);
+                            gd.setValue(value_double);
+                        }
+                        catch (Exception e){
+                            return;
+                        }
+
+                        //update Gauge
+
+
+                        RowItem item = rowItems.get(i);
+
+                        item.setMaxValue((float) gd.getValueMax());
+                        item.setMinValue((float) gd.getValueMin());
+                        item.setCurrentValue((float) gd.getValue());
+
+                        item.setUnit(gd.getUnit());
+                        item.setTitle(gd.getName());
+
+                        int precision = gd.getPrecision();
+
+                        item.setAttrib1("Min: " + format("%." + precision + "f", gd.getValueMin()));
+                        item.setAttrib2("Cur: " + format("%." + precision + "f", gd.getValue()));
+                        item.setAttrib3("Max: " + format("%." + precision + "f", gd.getValueMax()));
+
+                        /*
+                        CustomGauge g = item.getGauge();
+                        if(g!=null){
+                            g.setMaxValue((float) gd.getValueMax());
+                            g.setMinValue((float) gd.getValueMin());
+                            g.setValue((float) gd.getValue());
+
+                            g.setTitle(gd.getUnit());
+                        }
+                        */
                     }
                 }
 
             }
         }
+
+        adapter.notifyDataSetChanged();
     }
 
-    public void getSensor10(View v){
-        sendSensorRequest(10);
-    }
-
-    public void sendSensorRequest(int sensor_id){
-        if(networker != null) {
-            networker.SendDataToNetwork("get::" + Integer.toString(sensor_id) + ";");
-        }
-    }
 
     public void showNoticeDialog(Sensor sensor) {
         // Create an instance of the dialog fragment and show it
@@ -327,16 +478,28 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
+
         SensorDialog sd = (SensorDialog) dialog;
-        long sensor_id = sd.getSensorID();
-        int value = sd.getSensorIndex();
-        for(int i = 0; i < sensors.size(); i++){
-            Sensor s = sensors.get(i);
-            if(s.getId() == sensor_id){
-                //update sensor
-                s.setIndex(value);
-                db = new DataBaseHandle(getApplicationContext());
-                db.updateSensor(s);
+        //check if it was successful
+        if(((SensorDialog) dialog).isSuccess()) {
+            long sensor_id = sd.getSensorID();
+            int value = sd.getSensorIndex();
+            for (int i = 0; i < sensors.size(); i++) {
+                Sensor s = sensors.get(i);
+                if (s.getId() == sensor_id) {
+                    //update sensor
+                    s.setIndex(value);
+                    db = new DataBaseHandle(getApplicationContext());
+                    db.updateSensor(s);
+
+
+                    //update gauge data and gauge
+                    GaugeData gs = sensor_gaugedatas.get(i);
+                    gs.setValue(0.0);
+                    gs.setValueMax(0.0);
+                    gs.setValueMin(0.0);
+
+                }
             }
         }
     }

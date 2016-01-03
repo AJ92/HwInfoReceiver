@@ -1,8 +1,8 @@
 apply plugin: 'android'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    compileSdkVersion 21
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         minSdkVersion 11
@@ -12,13 +12,15 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            //runProguard false //replaced by next line
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:appcompat-v7:21.+'
+    compile 'com.android.support:gridlayout-v7:21.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

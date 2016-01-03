@@ -16,46 +16,6 @@
         android:layout_alignParentStart="true"
         android:id="@+id/tableLayout">
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <ImageButton
-                    android:layout_width="42dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton"
-                    android:contentDescription="@string/desc_add_new_server"
-                    android:src="@android:drawable/ic_menu_add"
-                    android:background="@android:color/transparent"
-                    android:onClick="addServerToList" />
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editText"
-                    android:layout_weight="1"
-                    android:inputType="textUri" />
-            </LinearLayout>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DROP DB"
-                android:id="@+id/button_request"
-                android:layout_column="0"
-                android:onClick="dropdb" />
-        </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"

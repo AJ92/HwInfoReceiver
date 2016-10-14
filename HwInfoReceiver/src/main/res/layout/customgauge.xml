@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.threedevs.aj.HwInfoReceiver.CustomGauge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gauge="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+
+    android:paddingBottom="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp"
+
+
+    gauge:pointStartColor="@color/gauge_start_color"
+    gauge:pointEndColor="@color/gauge_end_color"
+
+
+    gauge:strokeCap="ROUND"
+    gauge:strokeColor="@color/gauge_background_color"
+    gauge:strokeWidth="15dp"
+    gauge:startValue="0"
+    gauge:endValue="1000"
+    gauge:sweepAngel="270"
+    >
+
+
+</com.threedevs.aj.HwInfoReceiver.CustomGauge>

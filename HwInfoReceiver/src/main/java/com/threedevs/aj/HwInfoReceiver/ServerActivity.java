@@ -43,10 +43,6 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
     //UI TEST
     private List<RowItem> rowItems;
 
-
-
-
-
     private Networker networker = null;
     private DataBaseHandle db;
 

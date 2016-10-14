@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/card_greenborder"
+    android:orientation="vertical"
+    android:padding="2dp"
+    android:id="@+id/card">
+
+       <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="loading"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/TransparentGrey"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.threedevs.aj.HwInfoReceiver.CustomGauge
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:gauge="http://schemas.android.com/apk/res-auto"
+
+            android:id="@+id/gauge"
+
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+
+            gauge:pointStartColor="@color/gauge_start_color"
+            gauge:pointEndColor="@color/gauge_end_color"
+
+            gauge:strokeCap="ROUND"
+            gauge:strokeColor="@color/gauge_background_color"
+            gauge:strokeWidth="6dp"
+            gauge:startValue="0"
+            gauge:endValue="1000"
+            gauge:sweepAngel="270"
+            gauge:titleValue="loading"
+            />
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/attrib1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/TransparentGrey"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_weight="0.03"/>
+            <TextView
+                android:id="@+id/attrib2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/TransparentGrey"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_weight="0.03"/>
+            <TextView
+                android:id="@+id/attrib3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/TransparentGrey"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_weight="0.03"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

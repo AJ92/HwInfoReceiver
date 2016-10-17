@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:paddingTop="5dp" >
+
+    <com.threedevs.aj.HwInfoReceiver.CustomGauge
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom_gauge="http://schemas.android.com/apk/res-auto"
+
+        android:id="@+id/gauge"
+
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+
+        custom_gauge:pointStartColor="@color/gauge_start_color"
+        custom_gauge:pointEndColor="@color/gauge_end_alternative_color"
+
+        custom_gauge:strokeCap="ROUND"
+        custom_gauge:strokeColor="@color/gauge_background_color"
+        custom_gauge:strokeWidth="3dp"
+        custom_gauge:startValue="0"
+        custom_gauge:endValue="1000"
+        custom_gauge:sweepAngel="270"
+        custom_gauge:titleValue="loading"
+        custom_gauge:titleSize="14dp"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="1dp" >
+        <TextView
+            android:id="@+id/gauge_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:layout_margin="1dp"
+            android:textSize="11dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/gauge_text_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:layout_margin="1dp"
+            android:textSize="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/gauge_text_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:layout_margin="1dp"
+            android:textSize="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/gauge_text_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:layout_margin="1dp"
+            android:textSize="10dp" >
+        </TextView>
+
+    </LinearLayout>
+
+</LinearLayout>

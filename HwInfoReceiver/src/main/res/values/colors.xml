@@ -9,6 +9,7 @@
     <!--some color defs -->
     <color name="gauge_start_color">#44FF44</color>
     <color name="gauge_end_color">#11AA11</color>
+    <color name="gauge_end_alternative_color">#FF1111</color>
     <color name="gauge_background_color">#CCCCCC</color>
 
     <!--some color defs -->

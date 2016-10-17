@@ -146,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
 
         ((CustomApplication)getApplication()).setIP(ip);
 
-        Intent si = new Intent(MainActivity.this, ServerActivity.class);
+        Intent si = new Intent(MainActivity.this, ServerActivityV2.class);
         si.putExtra("ip", ip); //Optional parameters
         MainActivity.this.startActivity(si);
     }

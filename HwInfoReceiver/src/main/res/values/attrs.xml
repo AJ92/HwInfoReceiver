@@ -12,5 +12,6 @@
         <attr name="startValue" format="integer" />
         <attr name="endValue" format="integer" />
         <attr name="titleValue" format="string" />
+        <attr name="titleSize"  format="dimension"/>
     </declare-styleable>
 </resources>

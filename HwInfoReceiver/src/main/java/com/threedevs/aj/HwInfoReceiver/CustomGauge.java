@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -32,6 +33,7 @@ public class CustomGauge extends View {
 	private float mEndValue;
 	private float mValue;
     private String mTitle = "";
+    private float mTitleSize;
 	private double mPointAngel;
 	private float mRectLeft;
 	private float mRectTop;
@@ -71,7 +73,7 @@ public class CustomGauge extends View {
 		
 		// scale (from mStartValue to mEndValue)
 		mStartValue = a.getInt(R.styleable.CustomGauge_startValue, 0);
-		mEndValue = a.getInt(R.styleable.CustomGauge_endValue, 1000);
+		mEndValue = a.getInt(R.styleable.CustomGauge_endValue, 100);
 		
 		// pointer size and color
 		mPointSize = a.getInt(R.styleable.CustomGauge_pointSize, 0);
@@ -86,6 +88,8 @@ public class CustomGauge extends View {
         if(mTitle == null){
             mTitle = "TEST";
         }
+
+        mTitleSize = a.getDimension(R.styleable.CustomGauge_titleSize, 14);
 
 		a.recycle();
 		init();
@@ -118,14 +122,14 @@ public class CustomGauge extends View {
         titlePaint.setAntiAlias(true);
         titlePaint.setTypeface(Typeface.DEFAULT_BOLD);
         titlePaint.setTextAlign(Paint.Align.CENTER);
-        titlePaint.setTextSize(20.00f);
-        titlePaint.setTextScaleX(0.8f);
+        titlePaint.setTextSize(mTitleSize);
+        titlePaint.setTextScaleX(1.0f);
 
 
         class mListener extends GestureDetector.SimpleOnGestureListener {
             @Override
             public boolean onDown(MotionEvent e) {
-                return true;
+                return false;
             }
         }
         mDetector = new GestureDetector(CustomGauge.this.getContext(), new mListener());
@@ -139,7 +143,7 @@ public class CustomGauge extends View {
         boolean result = mDetector.onTouchEvent(event);
         if (!result) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                result = true;
+                result = false;
             }
         }
         return result;
@@ -217,7 +221,11 @@ public class CustomGauge extends View {
 		mPaint.setShader(null);
 		canvas.drawArc(mRect, mStartAngel, mSweepAngel, false, mPaint);
 		mPaint.setColor(mPointStartColor);
-		mPaint.setShader(new LinearGradient(0, 0, 0, getHeight(), mPointEndColor, mPointStartColor, android.graphics.Shader.TileMode.MIRROR));
+
+        int colorArray[] = {mPointEndColor, mPointStartColor};
+        float pointArray[] = {0.2f, 0.6f};
+
+		mPaint.setShader(new LinearGradient(0, 0 , getWidth(), getHeight(), colorArray, pointArray, Shader.TileMode.CLAMP));
 		if (mPointSize>0) {//if size of pointer is defined
 			if (mPoint > mStartAngel + mPointSize/2) {
 				canvas.drawArc(mRect, mPoint - mPointSize/2, mPointSize, false, mPaint);
@@ -237,11 +245,15 @@ public class CustomGauge extends View {
 
 	    
 	}
-	
+
+    public void update(){
+        invalidate();
+    }
+
 	public void setValue(float value) {
 		mValue = value;
 		mPoint = (float)(mStartAngel + (mValue-mStartValue) * mPointAngel);
-		invalidate();
+		//invalidate();
 	}
 	
 	public float getValue() {

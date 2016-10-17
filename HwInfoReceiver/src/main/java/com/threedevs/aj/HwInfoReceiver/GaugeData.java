@@ -1,5 +1,9 @@
 package com.threedevs.aj.HwInfoReceiver;
 
+import android.widget.TextView;
+
+import static java.lang.String.format;
+
 /**
  * Created by AJ on 26.12.2014.
  */
@@ -15,8 +19,65 @@ public class GaugeData {
     private String name = "";
     private String unit = "";
 
+    private CustomGauge view;
+    private TextView name_view;
+    private TextView cur_view;
+    private TextView min_view;
+    private TextView max_view;
+
     public GaugeData(){
 
+    }
+
+    public void updateViews(){
+        if(view!=null){
+            view.setTitle(unit);
+            view.setValue((float)value_current);
+            if(view.getMaxValue() < value_max){
+                view.setMaxValue((float)value_max);
+            }
+            if(view.getMaxValue() < value_max){
+                view.setMaxValue((float)value_max);
+            }
+            if(view.getMinValue() > value_min){
+                view.setMinValue((float)value_min);
+            }
+
+            view.update();
+        }
+
+        if(name_view!=null){
+            name_view.setText(name);
+        }
+        if(cur_view!=null){
+            cur_view.setText("Cur: " + format("%." + precision + "f", value_current));
+        }
+        if(min_view!=null){
+            min_view.setText("Min: " + format("%." + precision + "f", value_min));
+        }
+        if(max_view!=null){
+            max_view.setText("Max: " + format("%." + precision + "f", value_max));
+        }
+    }
+
+    public void setGauge(CustomGauge g){
+        view = g;
+    }
+
+    public void setTitleTextView(TextView tv){
+        name_view = tv;
+    }
+
+    public void setCurrentTextView(TextView tv){
+        cur_view = tv;
+    }
+
+    public void setMinTextView(TextView tv){
+        min_view = tv;
+    }
+
+    public void setMaxTextView(TextView tv){
+        max_view = tv;
     }
 
     public void setName(String name){

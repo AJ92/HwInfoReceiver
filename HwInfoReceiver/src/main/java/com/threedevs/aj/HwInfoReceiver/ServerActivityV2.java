@@ -153,7 +153,9 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
         for(int i = 0; i < sensors.size(); i++){
             //construct GaugeData and CustomGauge
-            sensor_gaugedatas.add(new GaugeData());
+            GaugeData gd = new GaugeData();
+            gd.setName("id: " + sensors.get(i).getId());
+            sensor_gaugedatas.add(gd);
         }
     }
 
@@ -225,7 +227,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
     public void showNoticeDialog(Sensor sensor) {
         // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = new SensorDialog(sensor.getId(), (int) sensor.getIndex());
+        DialogFragment dialog = SensorDialog.newInstance(sensor.getId(), (int) sensor.getIndex());
         dialog.show(getSupportFragmentManager(), "SensorDialog");
     }
 

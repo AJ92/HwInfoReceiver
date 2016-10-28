@@ -467,7 +467,7 @@ public class ServerActivity extends ActionBarActivity implements SensorDialog.Se
 
     public void showNoticeDialog(Sensor sensor) {
         // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = new SensorDialog(sensor.getId(), (int) sensor.getIndex());
+        DialogFragment dialog = SensorDialog.newInstance(sensor.getId(), (int) sensor.getIndex());
         dialog.show(getSupportFragmentManager(), "SensorDialog");
     }
 

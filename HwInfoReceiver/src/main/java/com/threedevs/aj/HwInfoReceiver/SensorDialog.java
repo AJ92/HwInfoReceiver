@@ -16,6 +16,22 @@ import android.widget.NumberPicker;
  */
 public class SensorDialog extends DialogFragment {
 
+    private static final String EXTRA_SENSOR_ID = "SENSOR_ID";
+    private static final String EXTRA_SENSOR_VALUE = "SENSOR_VALUE";
+
+    public SensorDialog(){
+
+    }
+
+    public static SensorDialog newInstance(long sensor_id, int value){
+        SensorDialog fragment = new SensorDialog();
+        Bundle bundle = new Bundle(2);
+        bundle.putLong(EXTRA_SENSOR_ID, sensor_id);
+        bundle.putInt(EXTRA_SENSOR_VALUE, value);
+        fragment.setArguments(bundle);
+        return fragment ;
+    }
+
     /* The activity that creates an instance of this dialog fragment must
  * implement this interface in order to receive event callbacks.
  * Each method passes the DialogFragment in case the host needs to query it. */
@@ -33,12 +49,6 @@ public class SensorDialog extends DialogFragment {
     private int value = 0;
 
     private boolean success = false;
-
-    public SensorDialog(long sensor_id, int value){
-        this.sensor_id = sensor_id;
-        this.value = value;
-    }
-
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -58,6 +68,10 @@ public class SensorDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        sensor_id = getArguments().getLong(EXTRA_SENSOR_ID);
+        value = getArguments().getInt(EXTRA_SENSOR_VALUE);
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();

@@ -42,4 +42,11 @@
 
     <string name="server_status">Status</string>
 
+    <!-- INTRO STUFF -->
+    <string name="intro_slide_1_title">Hello</string>
+    <string name="intro_slide_1_description">This is a quick setup tutorial to get you startet. Thank you for downloading this app!</string>
+
+    <string name="intro_slide_2_title">Example action</string>
+    <string name="intro_slide_2_description">Example action</string>
+
 </resources>

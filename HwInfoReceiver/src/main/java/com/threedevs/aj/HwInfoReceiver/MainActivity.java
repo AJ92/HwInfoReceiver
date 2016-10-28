@@ -59,6 +59,13 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
 
         // get the networker...
         networker = ((CustomApplication)getApplication()).getNetworker();
+
+
+
+
+        //test
+        Intent si = new Intent(MainActivity.this, IntroActivity.class);
+        MainActivity.this.startActivity(si);
     }
 
 

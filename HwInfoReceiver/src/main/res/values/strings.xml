@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HwInfoReceiver</string>
+    <string name="app_name">HwR</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_addsensor">Add Sensor</string>
     <string name="action_cleardatabase">Clear Database</string>
@@ -43,10 +43,10 @@
     <string name="server_status">Status</string>
 
     <!-- INTRO STUFF -->
-    <string name="intro_slide_1_title">Hello</string>
-    <string name="intro_slide_1_description">This is a quick setup tutorial to get you startet. Thank you for downloading this app!</string>
+    <string name="intro_slide_1_title">Hi</string>
+    <string name="intro_slide_1_description">I am HwR. I can read sensor data from your PC.</string>
 
-    <string name="intro_slide_2_title">Example action</string>
-    <string name="intro_slide_2_description">Example action</string>
+    <string name="intro_slide_2_title">Quick start</string>
+    <string name="intro_slide_2_description">The following slides will explain how to use me.</string>
 
 </resources>

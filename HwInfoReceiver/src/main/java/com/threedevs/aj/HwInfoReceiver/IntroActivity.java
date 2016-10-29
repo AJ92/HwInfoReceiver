@@ -30,68 +30,21 @@ public class IntroActivity extends AppIntro {
                 R.drawable.intro_hi,
                 Color.parseColor("#66BB6A")));
 
-        //quick start
+        //help
         addSlide(AppIntroFragment.newInstance(
                 getString(R.string.intro_slide_2_title),
                 getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
+                R.drawable.ic_help_outline_white_48dp,
                 Color.parseColor("#66BB6A")));
 
-        //download hwinfo
+        //beta
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
+                getString(R.string.intro_slide_3_title),
+                getString(R.string.intro_slide_3_description),
+                R.drawable.icon,
                 Color.parseColor("#66BB6A")));
 
-        //hwinfo enable shared memory
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
 
-        //hwinfo start sensors
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
-
-        //download hwinfo transmitter
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
-
-        //get ip in hwinfo transmitter
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
-
-        //add server
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
-
-        //add sensor
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
-
-        //done...
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.intro_hi,
-                Color.parseColor("#66BB6A")));
 
         // OPTIONAL METHODS
         // Override bar/separator color.

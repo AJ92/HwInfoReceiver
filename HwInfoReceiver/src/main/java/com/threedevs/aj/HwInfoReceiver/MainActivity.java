@@ -2,6 +2,7 @@ package com.threedevs.aj.HwInfoReceiver;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
     private EditText et;
     private ListView lv;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +63,21 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
         // get the networker...
         networker = ((CustomApplication)getApplication()).getNetworker();
 
+        //first run?
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(CustomApplication.PREFS_NAME, 0);
+        boolean first_run = settings.getBoolean("first_run", true);
 
+        if(first_run == true) {
+            Intent si = new Intent(MainActivity.this, IntroActivity.class);
+            MainActivity.this.startActivity(si);
 
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("first_run", false);
 
-        //test
-        Intent si = new Intent(MainActivity.this, IntroActivity.class);
-        MainActivity.this.startActivity(si);
+            // Commit the edits!
+            editor.commit();
+        }
     }
 
 
@@ -181,10 +193,9 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
             showNoticeDialog();
             return true;
         }
-        if (id == R.id.action_clear_database) {
-            dropdb(null);
-            return true;
-        }
+
+        //    dropdb(null);
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -4,19 +4,20 @@
     tools:context="com.threedevs.aj.HwInfoReceiver.MainActivity" >
 
     <item android:id="@+id/action_add_server"
-        android:icon="@drawable/add_server"
+        android:icon="@drawable/ic_dns_black_48dp"
         android:title="@string/action_addserver"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
-    <item android:id="@+id/action_clear_database"
-        android:icon="@drawable/clear_database"
-        android:title="@string/action_cleardatabase"
-        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_help"
+        android:icon="@drawable/ic_help_black_48dp"
+        android:title="@string/action_help_server"
+        app:showAsAction="always"/>
 
     <item android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_black_48dp"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
 
 </menu>

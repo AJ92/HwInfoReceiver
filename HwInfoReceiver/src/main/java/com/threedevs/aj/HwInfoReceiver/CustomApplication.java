@@ -19,6 +19,7 @@ public class CustomApplication extends Application {
     private Networker nw;
     private String current_ip = null;
 
+    public static final String PREFS_NAME = "HwR_Prefs";
 
     @Override
     public void onCreate() {

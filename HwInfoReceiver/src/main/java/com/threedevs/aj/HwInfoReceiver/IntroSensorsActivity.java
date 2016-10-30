@@ -1,6 +1,5 @@
 package com.threedevs.aj.HwInfoReceiver;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +12,7 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
  * Created by aj on 29.10.16.
  */
 
-public class IntroActivity extends AppIntro {
+public class IntroSensorsActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,25 +22,32 @@ public class IntroActivity extends AppIntro {
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
 
-        //Hi
+        //sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_1_title),
-                getString(R.string.intro_slide_1_description),
-                R.drawable.sensor_sensor,
+                getString(R.string.sensor_slide_1_title),
+                getString(R.string.sensor_slide_1_description),
+                R.drawable.sensors,
                 Color.parseColor("#66BB6A")));
 
-        //help
+        //add sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_2_title),
-                getString(R.string.intro_slide_2_description),
-                R.drawable.help_help,
+                getString(R.string.sensor_slide_2_title),
+                getString(R.string.sensor_slide_2_description),
+                R.drawable.ic_control_point_black_48dp,
                 Color.parseColor("#66BB6A")));
 
-        //beta
+        //modify sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.intro_slide_3_title),
-                getString(R.string.intro_slide_3_description),
-                R.drawable.icon,
+                getString(R.string.sensor_slide_3_title),
+                getString(R.string.sensor_slide_3_description),
+                R.drawable.sensor_menu,
+                Color.parseColor("#66BB6A")));
+
+        //setup sensors
+        addSlide(AppIntroFragment.newInstance(
+                getString(R.string.sensor_slide_4_title),
+                getString(R.string.sensor_slide_4_description),
+                R.drawable.sensor_ids,
                 Color.parseColor("#66BB6A")));
 
 

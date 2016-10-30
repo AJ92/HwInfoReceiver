@@ -189,6 +189,13 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.action_help) {
+            Intent si = new Intent(MainActivity.this, IntroServerConnectionActivity.class);
+            MainActivity.this.startActivity(si);
+            return true;
+        }
+
         if (id == R.id.action_add_server) {
             showNoticeDialog();
             return true;

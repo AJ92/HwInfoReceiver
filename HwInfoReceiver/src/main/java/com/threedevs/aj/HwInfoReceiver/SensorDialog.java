@@ -103,7 +103,7 @@ public class SensorDialog extends DialogFragment {
             Log.e("SensorDialog","NumberPicker is null?");
         }
         np.setMaxValue(200);
-        np.setMinValue(1);
+        np.setMinValue(0);
         np.setValue(value);
 
         return builder.create();

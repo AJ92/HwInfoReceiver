@@ -1,6 +1,7 @@
 package com.threedevs.aj.HwInfoReceiver;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -318,6 +319,11 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_help) {
+            Intent si = new Intent(ServerActivityV2.this, IntroSensorsActivity.class);
+            ServerActivityV2.this.startActivity(si);
             return true;
         }
         if (id == R.id.action_add_sensor) {

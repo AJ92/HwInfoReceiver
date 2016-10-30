@@ -91,6 +91,7 @@ public class ServerDialog extends DialogFragment {
 
 
         te = (EditText) view.findViewById(R.id.editText);
+        te.setText("192.168.xxx.xxx");
         if(te == null){
             Log.e("ServerDialog", "EditText is null?");
         }

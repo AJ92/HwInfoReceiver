@@ -4,7 +4,7 @@
     tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivity" >
 
     <item android:id="@+id/action_add_sensor"
-        android:icon="@drawable/ic_memory_black_48dp"
+        android:icon="@drawable/ic_control_point_black_48dp"
         android:title="@string/action_addsensor"
         app:showAsAction="always"/>
 

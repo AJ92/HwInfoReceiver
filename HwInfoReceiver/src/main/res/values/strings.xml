@@ -43,16 +43,69 @@
 
     <string name="server_status">Status</string>
 
+    <string name="title_activity_application_settings">Settings</string>
+
     <!-- INTRO STUFF -->
-    <string name="intro_slide_1_title">Hi</string>
-    <string name="intro_slide_1_description">I am HwR. I can read sensor data from your windows PC.</string>
+    <string name="intro_slide_1_title">Hi, I am HwR.</string>
+    <string name="intro_slide_1_description">I can read sensor data from your windows PC.</string>
 
     <string name="intro_slide_2_title">Help</string>
     <string name="intro_slide_2_description">You can always lookup how everything works in the menu.</string>
 
     <string name="intro_slide_3_title">Beta</string>
     <string name="intro_slide_3_description">I am still unfinished at this point so please report what ever error u find :)</string>
-    <string name="title_activity_application_settings">Settings</string>
+
+
+
+    <!-- set up a server -->
+    <string name="server_slide_1_title">Server connection setup.</string>
+    <string name="server_slide_1_description">In order to setup a connection to the server we need a few things...</string>
+
+    <string name="server_slide_2_title">Get HWiNFO</string>
+    <string name="server_slide_2_description">Get HWiNFO from www.hwinfo.com and install it on your PC.</string>
+
+    <string name="server_slide_3_title">Setup HWiNFO</string>
+    <string name="server_slide_3_description">Start HWiNFO, go to settings and make sure "Shared Memory Support" is checked.</string>
+
+    <string name="server_slide_4_title">Start HWiNFO sensors</string>
+    <string name="server_slide_4_description">Now start the sensors in HWiNFO. You can minimize all HWiNFO windows now or restart HWiNFO with sensors only.</string>
+
+
+    <string name="server_slide_5_title">Get HwInfoTransmitter</string>
+    <string name="server_slide_5_description">Get HwInfoTransmitter from  blog.sigsegowl.xyz/?p=972 and install it on your PC.</string>
+
+    <string name="server_slide_6_title">Get your IP</string>
+    <string name="server_slide_6_description">HwInfoTransmitter shows your IPs. Get your local IP.</string>
+
+    <string name="server_slide_7_title">Firewalls</string>
+    <string name="server_slide_7_description">Make sure your firewall allows connections!</string>
+
+    <string name="server_slide_8_title">Network</string>
+    <string name="server_slide_8_description">Make sure both devices are in the same network!</string>
+
+    <string name="server_slide_9_title">Add a server</string>
+    <string name="server_slide_9_description">Press on the "add server" icon and enter the previously obtained IP and confirm it.</string>
+
+    <string name="server_slide_10_title">Establish a connection</string>
+    <string name="server_slide_10_description">Your previously added IP address is now in the list. Long press on it and press connect. Thats it :)</string>
+
+
+
+    <!--sensor -->
+    <string name="sensor_slide_1_title">Sensors</string>
+    <string name="sensor_slide_1_description">This is a sensor reading. The following few slides explain how to create and setup sensors.</string>
+
+    <string name="sensor_slide_2_title">Add sensors</string>
+    <string name="sensor_slide_2_description">Once u established a connection to a server u can add new sensors by pressing on the "add sensor" button.</string>
+
+    <string name="sensor_slide_3_title">Modify a sensor</string>
+    <string name="sensor_slide_3_description">Long press on a sensor and you can set it up or remove it.</string>
+
+    <string name="sensor_slide_4_title">Setup a sensor</string>
+    <string name="sensor_slide_4_description">Press on "Settings" in the previous menu. Enter any ID you can find in the HwInfoTransmitter application and you are done!</string>
+
+
+
 
     <!-- Strings related to Settings -->
 

@@ -6,7 +6,8 @@
     <item android:id="@+id/action_add_server"
         android:icon="@drawable/ic_dns_black_48dp"
         android:title="@string/action_addserver"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:enabled="false" />
 
     <item android:id="@+id/action_help"
         android:icon="@drawable/ic_help_black_48dp"

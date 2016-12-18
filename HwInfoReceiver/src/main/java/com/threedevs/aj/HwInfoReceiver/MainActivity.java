@@ -130,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
             //showToast(servers.get(i).getIp());
         }
 
-        ListAdapter listenAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ip_list);
+        ListAdapter listenAdapter = new ArrayAdapter(this, R.layout.simple_list_item_c, ip_list);
         lv.setAdapter(listenAdapter);
         registerForContextMenu(lv);
     }

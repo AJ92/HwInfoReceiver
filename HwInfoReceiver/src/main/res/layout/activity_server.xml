@@ -11,10 +11,6 @@
     tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivity">
 
 
-
-
-
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -31,84 +27,6 @@
             android:paddingLeft="2dip"
             android:paddingRight="2dip"
             android:paddingTop="1dip" />
-
-
-
-
-
-
-
-
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView"
-            >
-
-            <!--
-            <android.support.v7.widget.GridLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                grid:columnCount="3"
-                grid:orientation="horizontal"
-                grid:rowCount="4"
-                android:id="@+id/gridLayout">
-
-
-                <android.support.v7.widget.Space
-                    android:layout_height="200dp"
-                    android:layout_width="200dp"
-                    grid:layout_column="2"
-                    grid:layout_row="0" />
-
-                <android.support.v7.widget.Space
-                    android:layout_height="200dp"
-                    android:layout_width="200dp"
-                    grid:layout_column="2"
-                    grid:layout_row="1" />
-
-                <android.support.v7.widget.Space
-                    android:layout_height="200dp"
-                    android:layout_width="200dp"
-                    grid:layout_column="2"
-                    grid:layout_row="2" />
-
-
-
-
-                <android.support.v7.widget.Space
-                    android:layout_height="200dp"
-                    android:layout_width="200dp"
-                    grid:layout_column="0"
-                    grid:layout_row="3" />
-
-                <android.support.v7.widget.Space
-                    android:layout_height="200dp"
-                    android:layout_width="200dp"
-                    grid:layout_column="1"
-                    grid:layout_row="3" />
-
-            </android.support.v7.widget.GridLayout>
-            -->
-
-
-            <android.support.v7.widget.GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                grid:columnCount="5"
-                grid:orientation="horizontal"
-                grid:rowCount="8"
-                android:id="@+id/gridLayout">
-
-
-
-            </android.support.v7.widget.GridLayout>
-
-         </ScrollView>
-
-
 
 
     </LinearLayout>

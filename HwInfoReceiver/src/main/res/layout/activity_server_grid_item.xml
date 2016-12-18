@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="11dp" >
+            android:textAppearance="@android:style/TextAppearance.Material.Medium">
         </TextView>
 
         <TextView
@@ -54,7 +54,8 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="10dp" >
+            android:textSize="10dp"
+            android:textStyle="normal|bold">
         </TextView>
 
         <TextView

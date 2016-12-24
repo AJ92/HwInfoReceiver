@@ -7,18 +7,20 @@
         android:icon="@drawable/ic_dns_black_48dp"
         android:title="@string/action_addserver"
         app:showAsAction="always"
-        android:enabled="false" />
+        android:enabled="true" />
 
     <item android:id="@+id/action_help"
         android:icon="@drawable/ic_help_black_48dp"
         android:title="@string/action_help_server"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:enabled="true" />
 
     <item android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings_black_48dp"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:enabled="true" />
 
 
 </menu>

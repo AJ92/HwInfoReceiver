@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/default_gap"
     android:paddingTop="@dimen/default_gap"
     tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivityV2"
-    android:numColumns="2">
+    android:numColumns="3">
 
 
 

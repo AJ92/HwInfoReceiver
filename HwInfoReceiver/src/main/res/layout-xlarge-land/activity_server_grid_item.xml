@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom_gauge="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
@@ -8,12 +9,10 @@
     android:paddingTop="5dp" >
 
     <com.threedevs.aj.HwInfoReceiver.CustomGauge
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:custom_gauge="http://schemas.android.com/apk/res-auto"
 
         android:id="@+id/gauge"
 
-        android:layout_width="130dp"
+        android:layout_width="180dp"
 
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
@@ -25,13 +24,13 @@
 
         custom_gauge:strokeCap="ROUND"
         custom_gauge:strokeColor="@color/gauge_background_color"
-        custom_gauge:strokeWidth="3dp"
+        custom_gauge:strokeWidth="4dp"
         custom_gauge:startValue="0"
         custom_gauge:endValue="1000"
         custom_gauge:sweepAngel="270"
         custom_gauge:titleValue="loading"
-        custom_gauge:titleSize="23dp"
-        android:layout_height="130dp" />
+        custom_gauge:titleSize="33dp"
+        android:layout_height="180dp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="27dp">
         </TextView>
 
         <TextView
@@ -54,7 +53,7 @@
             android:text="~"
             android:layout_margin="1dp"
             android:textStyle="normal|bold"
-            android:textSize="20dp">
+            android:textSize="27dp">
         </TextView>
 
         <TextView
@@ -63,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="27dp">
         </TextView>
 
         <TextView
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="27dp">
         </TextView>
 
     </LinearLayout>

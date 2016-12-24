@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_server_v2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:stretchMode="columnWidth"
+    android:paddingBottom="@dimen/default_gap"
+    android:paddingLeft="@dimen/default_gap"
+    android:paddingRight="@dimen/default_gap"
+    android:paddingTop="@dimen/default_gap"
+    tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivityV2"
+    android:numColumns="3">
+
+
+
+</GridView>

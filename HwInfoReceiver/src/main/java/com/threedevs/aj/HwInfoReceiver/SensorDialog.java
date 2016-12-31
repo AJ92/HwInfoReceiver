@@ -26,6 +26,7 @@ public class SensorDialog extends DialogFragment {
     public static SensorDialog newInstance(long sensor_id, int value){
         SensorDialog fragment = new SensorDialog();
         Bundle bundle = new Bundle(2);
+        Log.i("SensorDialog", "sensor id: " + sensor_id + "   index: " + value);
         bundle.putLong(EXTRA_SENSOR_ID, sensor_id);
         bundle.putInt(EXTRA_SENSOR_VALUE, value);
         fragment.setArguments(bundle);

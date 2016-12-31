@@ -22,19 +22,24 @@
         <item>Delete</item>
     </string-array>
 
-    <string name="title_activity_server">ServerActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
+    <string name="connection_lost_title">Connection lost</string>
+    <string name="connection_lost_message">Connection to server was lost or could not be established!</string>
 
 
     <string-array name="sensor_list_menu">
         <item>Settings</item>
         <item>Delete</item>
     </string-array>
+
+
+    <string name="shared_pref_key">com.threedevs.aj.hwr_shared_pref_key</string>
+
+    <string name="setting_use_dark_theme">Use dark theme (you might need to restart app)</string>
+    <string name="setting_use_dark_theme_pref">use_dark_theme</string>
+
+    <string name="setting_wipe_db">Wipe database (can\'t be undone!!!)</string>
+
+
 
 
     <string name="sensor_index">ID</string>
@@ -54,7 +59,6 @@
 
     <string name="intro_slide_3_title">Beta</string>
     <string name="intro_slide_3_description">I am still unfinished at this point so please report what ever error u find :)</string>
-
 
 
     <!-- set up a server -->
@@ -90,7 +94,6 @@
     <string name="server_slide_10_description">Your previously added IP address is now in the list. Long press on it and press connect. Thats it :)</string>
 
 
-
     <!--sensor -->
     <string name="sensor_slide_1_title">Sensors</string>
     <string name="sensor_slide_1_description">This is a sensor reading. The following few slides explain how to create and setup sensors.</string>
@@ -103,8 +106,6 @@
 
     <string name="sensor_slide_4_title">Setup a sensor</string>
     <string name="sensor_slide_4_description">Press on "Settings" in the previous menu. Enter any ID you can find in the HwInfoTransmitter application and you are done!</string>
-
-
 
 
     <!-- Strings related to Settings -->

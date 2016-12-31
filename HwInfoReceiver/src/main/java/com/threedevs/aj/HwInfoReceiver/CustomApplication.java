@@ -1,6 +1,8 @@
 package com.threedevs.aj.HwInfoReceiver;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 

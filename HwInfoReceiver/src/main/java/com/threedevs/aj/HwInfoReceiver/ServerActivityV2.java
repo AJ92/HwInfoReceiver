@@ -1,11 +1,14 @@
 package com.threedevs.aj.HwInfoReceiver;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -16,7 +19,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.threedevs.aj.HwInfoReceiver.CardLayout.RowItem;
 import com.threedevs.aj.HwInfoReceiver.Database.DataBaseHandle;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Sensor;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
@@ -49,6 +51,9 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
     private boolean destroyed = false;
 
+    private int connections_failed = 0;
+    private int max_connections_failed = 5;
+
 
     private Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -59,8 +64,48 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
                 return;
             }
 
+            if(networker == null){
+                connections_failed += 1;
+
+                if(connections_failed >= max_connections_failed) {
+                    //show connection lost dialog...
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showConnectionLostDialog();
+                        }
+                    });
+                    return;
+                }
+            }
+            else{
+                if(!networker.isConnected()){
+                    connections_failed += 1;
+
+                    if(connections_failed >= max_connections_failed) {
+                        //show connection lost dialog...
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showConnectionLostDialog();
+                            }
+                        });
+                        return;
+                    }
+                }
+                else{
+                    connections_failed = 0;
+                }
+            }
+
+
+
             //well we want to communicate tho :)
             if (networker != null) {
+
+                //simple ping...
+                networker.SendDataToNetwork("ping::ping;");
+
                 //request stuff
                 for (int i = 0; i < sensors.size(); i++) {
                     networker.SendDataToNetwork("get::" + Long.toString(sensors.get(i).getIndex()) + ";");
@@ -149,6 +194,10 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
         if(server != null) {
             sensors = db.getAllSensorsByServer(server);
+            for(int i = 0; i < sensors.size(); i++) {
+                Log.i(TAG, "sensor id: " + sensors.get(i).getId() + "  sensor index: " + sensors.get(i).getIndex());
+            }
+            Log.i(TAG, sensors.size() + " sensors found...");
             showToast( sensors.size() + " sensors found...");
         }
 
@@ -277,7 +326,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
         SensorDialog sd = (SensorDialog) dialog;
         //check if it was successful
-        if(((SensorDialog) dialog).isSuccess()) {
+        //if(((SensorDialog) dialog).isSuccess()) {
             long sensor_id = sd.getSensorID();
             int value = sd.getSensorIndex();
             for (int i = 0; i < sensors.size(); i++) {
@@ -286,8 +335,9 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
                     //update sensor
                     s.setIndex(value);
                     db = new DataBaseHandle(getApplicationContext());
-                    db.updateSensor(s);
+                    int updated = db.updateSensor(s);
 
+                    Log.i(TAG, "updated sensor : " + updated);
 
                     //update gauge data and gauge
                     GaugeData gs = sensor_gaugedatas.get(i);
@@ -297,7 +347,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
                 }
             }
-        }
+        //}
     }
 
     @Override
@@ -318,9 +368,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         if (id == R.id.action_help) {
             Intent si = new Intent(ServerActivityV2.this, IntroSensorsActivity.class);
             ServerActivityV2.this.startActivity(si);
@@ -330,11 +378,31 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
             addSensor(null);
             return true;
         }
+
+        if (id == R.id.action_settings) {
+            Intent si = new Intent(ServerActivityV2.this, MainSettingsActivity.class);
+            ServerActivityV2.this.startActivity(si);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+
+        boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+
+        if(use_dark_theme) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_v2);
 
@@ -365,7 +433,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
             server = db.getServerByIP(server_ip);
             if (server != null) {
                 showToast("Server found in DB");
-                setTitle("Server ip: " + server_ip + " id: " + server.getId());
+                setTitle(server_ip + " id: " + server.getId());
             }
         }
 
@@ -374,9 +442,8 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         reLoadSensorsFromDataBase();
         createGridView();
 
-
-
         //start dat timer :)
+        //give it some time to connect...
         timerHandler.postDelayed(timerRunnable, 0);
     }
 
@@ -395,5 +462,20 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
         Toast toast = Toast.makeText(context, cs, duration);
         toast.show();
+    }
+
+    public void showConnectionLostDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.connection_lost_title)
+                .setMessage(R.string.connection_lost_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        destroyed = true;
+                        ServerActivityV2.this.finish();
+                    }
+                })
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setCancelable(false)
+                .show();
     }
 }

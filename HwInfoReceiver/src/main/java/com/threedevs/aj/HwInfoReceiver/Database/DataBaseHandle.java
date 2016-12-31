@@ -236,12 +236,44 @@ public class DataBaseHandle extends SQLiteOpenHelper {
     //DELETE
     public void deleteServer(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        //get all sensors of this server
+        Server server = new Server(id);
+
+        List<Sensor> sensors = getAllSensorsByServer(server);
+        for(int i = sensors.size() -1; i >= 0; i--){
+            Sensor sensor = sensors.get(i);
+            deleteSensor(sensor.getId());
+        }
+
+        List<Long> server_sensors = getServerSensorIDsByServerID(id);
+        for(int i = 0; i < server_sensors.size(); i ++){
+            deleteServerSensor(server_sensors.get(i));
+        }
+
         db.delete(TABLE_SERVERS, KEY_ID + " = ?",
                 new String[] { String.valueOf(id) });
     }
 
     public void deleteSensor(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+
+        long server_sensor_id = getServerSensorIDBySensorID(id);
+        deleteServerSensor(server_sensor_id);
+
+        //incase of buuug
+        server_sensor_id = getServerSensorIDBySensorID(id);
+        deleteServerSensor(server_sensor_id);
+
+        //-1 is fake sensor index
+        Sensor sensor = new Sensor(id, -1);
+        List<Setting> sensor_settings = getAllSettingsBySensor(sensor);
+        for(int j = sensor_settings.size() -1; j >= 0; j--){
+            deleteSetting(sensor_settings.get(j).getId());
+        }
+        sensor_settings.clear();
+
         db.delete(TABLE_SENSORS, KEY_ID + " = ?",
                 new String[] { String.valueOf(id) });
     }
@@ -285,6 +317,12 @@ public class DataBaseHandle extends SQLiteOpenHelper {
                         c.getString((c.getColumnIndex(KEY_IP))),
                         c.getString((c.getColumnIndex(KEY_HOSTNAME))));
 
+                Log.i(TAG,
+                        c.getLong((c.getColumnIndex(KEY_ID))) + " " +
+                        c.getString((c.getColumnIndex(KEY_IP))) + " " +
+                        c.getString((c.getColumnIndex(KEY_HOSTNAME)))
+                );
+
                 // adding to sensor list
                 servers.add(server);
             } while (c.moveToNext());
@@ -312,6 +350,11 @@ public class DataBaseHandle extends SQLiteOpenHelper {
                 Sensor sensor = new Sensor();
                 sensor.setId(c.getLong((c.getColumnIndex(KEY_ID))));
                 sensor.setIndex((c.getLong(c.getColumnIndex(KEY_INDEX))));
+
+                Log.i(TAG,
+                        c.getLong((c.getColumnIndex(KEY_ID))) + " " +
+                        c.getLong((c.getColumnIndex(KEY_INDEX)))
+                );
 
                 // adding to sensor list
                 sensors.add(sensor);
@@ -343,6 +386,13 @@ public class DataBaseHandle extends SQLiteOpenHelper {
                 setting.setSetting((c.getString(c.getColumnIndex(KEY_SETTING))));
                 setting.setValue((c.getString(c.getColumnIndex(KEY_VALUE))));
 
+
+                Log.i(TAG,
+                        c.getLong((c.getColumnIndex(KEY_ID))) + " " +
+                                c.getString((c.getColumnIndex(KEY_SETTING))) + " " +
+                                c.getString((c.getColumnIndex(KEY_VALUE)))
+                );
+
                 // adding to sensor list
                 settings.add(setting);
             } while (c.moveToNext());
@@ -350,6 +400,24 @@ public class DataBaseHandle extends SQLiteOpenHelper {
         return settings;
     }
 
+    public List<Long> getServerSensorIDsByServerID(long id) {
+        List<Long> server_sensor_ids = new ArrayList<Long>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_SERVER_SENSOR + " WHERE " + KEY_SERVERID + " = '" + String.valueOf(id) + "'";
+
+        Log.i(TAG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                server_sensor_ids.add( c.getLong((c.getColumnIndex(KEY_ID))));
+            } while (c.moveToNext());
+        }
+        return server_sensor_ids;
+    }
 
     public Server getServerByIP(String ip) {
         Server server = null;

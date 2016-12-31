@@ -4,18 +4,24 @@
     tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivity" >
 
     <item android:id="@+id/action_add_sensor"
-        android:icon="@drawable/ic_control_point_black_48dp"
+        android:icon="?attr/server_menu_add_sensor"
         android:title="@string/action_addsensor"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:enabled="true"
+        android:visible="true" />
 
     <item android:id="@+id/action_help"
-        android:icon="@drawable/ic_help_black_48dp"
+        android:icon="?attr/server_menu_help"
         android:title="@string/action_help_server"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="true"
+        android:enabled="true" />
 
     <item android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black_48dp"
+        android:icon="?attr/server_menu_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:visible="true"
+        android:enabled="true" />
 </menu>

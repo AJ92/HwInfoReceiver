@@ -1,6 +1,8 @@
 package com.threedevs.aj.HwInfoReceiver;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +18,18 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
 public class IntroActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+
+        boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+
+        if(use_dark_theme) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
 
         // Note here that we DO NOT use setContentView();

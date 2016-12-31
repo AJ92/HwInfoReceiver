@@ -44,6 +44,18 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+
+        boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+
+        if(use_dark_theme) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
 
@@ -186,9 +198,7 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         if (id == R.id.action_help) {
             Intent si = new Intent(MainActivity.this, IntroServerConnectionActivity.class);
@@ -198,6 +208,12 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
 
         if (id == R.id.action_add_server) {
             showNoticeDialog();
+            return true;
+        }
+
+        if (id == R.id.action_settings) {
+            Intent si = new Intent(MainActivity.this, MainSettingsActivity.class);
+            MainActivity.this.startActivity(si);
             return true;
         }
 

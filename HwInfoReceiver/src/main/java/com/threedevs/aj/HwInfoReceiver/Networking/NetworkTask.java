@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 /**
+ * UNUSED!!!
+ *
  * Created by AJ on 14.07.2014.
  */
 public class NetworkTask extends AsyncTask<Void, byte[], Boolean> {

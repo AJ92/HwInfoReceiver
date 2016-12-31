@@ -4,19 +4,19 @@
     tools:context="com.threedevs.aj.HwInfoReceiver.MainActivity" >
 
     <item android:id="@+id/action_add_server"
-        android:icon="@drawable/ic_dns_black_48dp"
+        android:icon="?attr/main_menu_add_server"
         android:title="@string/action_addserver"
         app:showAsAction="always"
         android:enabled="true" />
 
     <item android:id="@+id/action_help"
-        android:icon="@drawable/ic_help_black_48dp"
+        android:icon="?attr/main_menu_help"
         android:title="@string/action_help_server"
         app:showAsAction="always"
         android:enabled="true" />
 
     <item android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black_48dp"
+        android:icon="?attr/main_menu_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="always"

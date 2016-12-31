@@ -14,12 +14,44 @@
          which is used to tint widgets -->
         <item name="colorAccent">@color/app_accent_color</item>
 
+
+        <!-- icons dark -->
+        <item name="main_menu_add_server">@drawable/ic_dns_black_48dp</item>
+        <item name="main_menu_help">@drawable/ic_help_black_48dp</item>
+        <item name="main_menu_settings">@drawable/ic_settings_black_48dp</item>
+
+        <item name="server_menu_add_sensor">@drawable/ic_control_point_black_48dp</item>
+        <item name="server_menu_help">@drawable/ic_help_black_48dp</item>
+        <item name="server_menu_settings">@drawable/ic_settings_black_48dp</item>
+
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight, and colorSwitchThumbNormal. -->
     </style>
 
-    <style name="Theme.Default" parent="@android:style/Theme"></style>
-    <style name="Theme.NoTitle" parent="@android:style/Theme.NoTitleBar"></style>
-    <style name="Theme.FullScreen" parent="@android:style/Theme.NoTitleBar.Fullscreen"></style>
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/app_primary_color_inverted</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/app_primary_dark_color_inverted</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+         which is used to tint widgets -->
+        <item name="colorAccent">@color/app_accent_color_inverted</item>
+
+        <!-- icons bright -->
+        <item name="main_menu_add_server">@drawable/ic_dns_white_48dp</item>
+        <item name="main_menu_help">@drawable/ic_help_white_48dp</item>
+        <item name="main_menu_settings">@drawable/ic_settings_white_48dp</item>
+
+        <item name="server_menu_add_sensor">@drawable/ic_control_point_white_48dp</item>
+        <item name="server_menu_help">@drawable/ic_help_white_48dp</item>
+        <item name="server_menu_settings">@drawable/ic_settings_white_48dp</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+    </style>
+
+
 
 </resources>

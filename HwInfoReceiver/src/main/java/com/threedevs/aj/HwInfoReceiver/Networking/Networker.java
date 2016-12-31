@@ -1,9 +1,7 @@
 package com.threedevs.aj.HwInfoReceiver.Networking;
 
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This is used in CustomApplication!
  * Created by AJ on 09.08.2014.
  */
 public class Networker extends Thread {
@@ -67,7 +66,9 @@ public class Networker extends Thread {
             Log.i(TAG, "run: Creating socket");
             SocketAddress sockaddr = new InetSocketAddress(ip, 8881);
             nsocket = new Socket();
-            nsocket.connect(sockaddr, 5000); //10 second connection timeout
+            nsocket.setTcpNoDelay(true);
+            nsocket.setSoTimeout(12000);
+            nsocket.connect(sockaddr, 12000); //12 second connection timeout
             if (nsocket.isConnected()) {
                 nis = nsocket.getInputStream();
                 nos = nsocket.getOutputStream();
@@ -75,7 +76,7 @@ public class Networker extends Thread {
                 Log.i(TAG, "run: Waiting for inital data...");
                 byte[] buffer = new byte[4096];
                 int read = nis.read(buffer, 0, 4096); //This is blocking
-                while ((read != -1) || !isCancelled()) {
+                while ((read != -1) || !isCancelled() || nsocket.isConnected()) {
                     byte[] tempdata = new byte[read];
                     System.arraycopy(buffer, 0, tempdata, 0, read);
                     String datastring = new String(tempdata);
@@ -103,6 +104,7 @@ public class Networker extends Thread {
             }
             Log.i(TAG, "run: Finished");
         }
+        Log.i(TAG, "run: Finished!");
     }
 
 
@@ -144,6 +146,15 @@ public class Networker extends Thread {
         } catch (Exception e) {
             Log.i(TAG, "SendDataToNetwork: Message send failed. Caught an exception: " + e);
         }
+    }
+
+    public boolean isConnected(){
+        if(nsocket != null){
+            if(nsocket.isConnected()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

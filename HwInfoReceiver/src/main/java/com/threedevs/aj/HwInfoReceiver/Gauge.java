@@ -262,6 +262,7 @@ public class Gauge extends View {
         faceRect.set(rimRect.left + rimSize, rimRect.top + rimSize,
                 rimRect.right - rimSize, rimRect.bottom - rimSize);
 
+        /*
         faceTexture = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.metal_rust);
         BitmapShader paperShader = new BitmapShader(faceTexture,
@@ -275,6 +276,7 @@ public class Gauge extends View {
         paperShader.setLocalMatrix(paperMatrix);
         facePaint.setStyle(Paint.Style.FILL);
         facePaint.setShader(paperShader);
+        */
 
         rimShadowPaint = new Paint();
         rimShadowPaint.setShader(new RadialGradient(0.5f, 0.5f, faceRect.width() / 2.0f,
@@ -311,12 +313,14 @@ public class Gauge extends View {
         titlePath = new Path();
         titlePath.addArc(new RectF(0.24f, 0.24f, 0.76f, 0.76f), -180.0f, -180.0f);
 
+        /*
         logoPaint = new Paint();
         logoPaint.setFilterBitmap(true);
         logo = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo);
         logoMatrix = new Matrix();
         logoScale = (1.0f / logo.getWidth()) * 0.3f;;
         logoMatrix.setScale(logoScale, logoScale);
+        */
 
         handPaint = new Paint();
         handPaint.setAntiAlias(true);

@@ -14,4 +14,12 @@
         <attr name="titleValue" format="string" />
         <attr name="titleSize"  format="dimension"/>
     </declare-styleable>
+
+    <attr name="main_menu_add_server" format="reference" />
+    <attr name="main_menu_help" format="reference" />
+    <attr name="main_menu_settings" format="reference" />
+
+    <attr name="server_menu_add_sensor" format="reference" />
+    <attr name="server_menu_help" format="reference" />
+    <attr name="server_menu_settings" format="reference" />
 </resources>

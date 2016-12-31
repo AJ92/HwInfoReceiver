@@ -22,6 +22,12 @@ public class Server {
         this.hostname = "not available";
     }
 
+    //convenience constructor for createing empty datasets with ids...
+    //(e.g. for deleting objects...)
+    public Server(long id){
+        this.id = id;
+    }
+
     public String getIp() {
         return ip;
     }

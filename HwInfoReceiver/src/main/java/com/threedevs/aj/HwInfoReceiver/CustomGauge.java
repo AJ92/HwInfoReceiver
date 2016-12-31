@@ -64,7 +64,7 @@ public class CustomGauge extends View {
 		
 		// stroke style
 		mStrokeWidth = a.getDimension(R.styleable.CustomGauge_strokeWidth, 10);
-		mStrokeColor = a.getColor(R.styleable.CustomGauge_strokeColor, android.R.color.darker_gray);
+		mStrokeColor = a.getColor(R.styleable.CustomGauge_strokeColor, getResources().getColor(android.R.color.darker_gray));
 		mStrokeCap = a.getString(R.styleable.CustomGauge_strokeCap);
 		
 		// angel start and sweep (opposite direction 0, 270, 180, 90)
@@ -77,8 +77,8 @@ public class CustomGauge extends View {
 		
 		// pointer size and color
 		mPointSize = a.getInt(R.styleable.CustomGauge_pointSize, 0);
-		mPointStartColor = a.getColor(R.styleable.CustomGauge_pointStartColor, android.R.color.white);
-		mPointEndColor = a.getColor(R.styleable.CustomGauge_pointEndColor, android.R.color.white);
+		mPointStartColor = a.getColor(R.styleable.CustomGauge_pointStartColor, getResources().getColor(android.R.color.white));
+		mPointEndColor = a.getColor(R.styleable.CustomGauge_pointEndColor, getResources().getColor(android.R.color.white));
 		
 		// calculating one point sweep
 		mPointAngel = ((double) Math.abs(mSweepAngel) / (mEndValue - mStartValue));

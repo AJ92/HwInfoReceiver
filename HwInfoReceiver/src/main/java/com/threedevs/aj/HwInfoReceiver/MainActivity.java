@@ -80,12 +80,25 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
         SharedPreferences settings = getSharedPreferences(CustomApplication.PREFS_NAME, 0);
         boolean first_run = settings.getBoolean("first_run", true);
 
+        int desktop_app_version = settings.getInt("desktop_app_version", 0);
+
         if(first_run == true) {
             Intent si = new Intent(MainActivity.this, IntroActivity.class);
             MainActivity.this.startActivity(si);
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("first_run", false);
+
+            // Commit the edits!
+            editor.commit();
+        }
+
+        if(desktop_app_version <= 0) {
+            Intent si = new Intent(MainActivity.this, IntroUpdateAppActivity.class);
+            MainActivity.this.startActivity(si);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("desktop_app_version", 1);
 
             // Commit the edits!
             editor.commit();

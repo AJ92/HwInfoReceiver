@@ -14,7 +14,7 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
  * Created by aj on 29.10.16.
  */
 
-public class IntroSensorsActivity extends AppIntro {
+public class IntroUpdateAppActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         SharedPreferences sharedPref = this.getSharedPreferences(
@@ -38,32 +38,22 @@ public class IntroSensorsActivity extends AppIntro {
 
         //sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.sensor_slide_1_title),
-                getString(R.string.sensor_slide_1_description),
-                R.drawable.sensors,
+                getString(R.string.appupdate_slide_1_title),
+                getString(R.string.appupdate_slide_1_description),
+                0,
                 Color.parseColor("#66BB6A")));
 
-        //add sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.sensor_slide_2_title),
-                getString(R.string.sensor_slide_2_description),
-                R.drawable.ic_control_point_black_48dp,
+                getString(R.string.appupdate_slide_2_title),
+                getString(R.string.appupdate_slide_2_description),
+                0,
                 Color.parseColor("#66BB6A")));
 
-        //modify sensors
         addSlide(AppIntroFragment.newInstance(
-                getString(R.string.sensor_slide_3_title),
-                getString(R.string.sensor_slide_3_description),
-                R.drawable.sensor_menu,
+                getString(R.string.appupdate_slide_3_title),
+                getString(R.string.appupdate_slide_3_description),
+                0,
                 Color.parseColor("#66BB6A")));
-
-        //setup sensors
-        addSlide(AppIntroFragment.newInstance(
-                getString(R.string.sensor_slide_4_title),
-                getString(R.string.sensor_slide_4_description),
-                R.drawable.sensor_menu,
-                Color.parseColor("#66BB6A")));
-
 
 
         // OPTIONAL METHODS

@@ -24,6 +24,7 @@
         <activity android:name=".IntroActivity" />
         <activity android:name=".IntroServerConnectionActivity" />
         <activity android:name=".IntroSensorsActivity" />
+        <activity android:name=".IntroUpdateAppActivity" />
         <activity
             android:name=".ApplicationSettingsActivity"
             android:label="@string/title_activity_application_settings" />

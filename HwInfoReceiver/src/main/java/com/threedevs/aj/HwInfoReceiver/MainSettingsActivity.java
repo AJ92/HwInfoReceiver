@@ -21,6 +21,8 @@ public class MainSettingsActivity extends AppCompatActivity {
                 getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
 
         boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+        boolean keep_screen_on = sharedPref.getBoolean(getString(R.string.setting_keep_screen_on_pref), false);
+
 
         if(use_dark_theme) {
             setTheme(R.style.AppTheme_Dark);
@@ -34,6 +36,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_settings);
 
         CheckBox checkBoxUseDarkTheme = (CheckBox) this.findViewById(R.id.checkBoxUseDarkTheme);
+        CheckBox checkBoxKeepScreenOn = (CheckBox) this.findViewById(R.id.checkBoxKeepScreenOn);
         Button buttonWipeDB = (Button) this.findViewById(R.id.buttonWipeDB);
 
         if(use_dark_theme){
@@ -41,6 +44,13 @@ public class MainSettingsActivity extends AppCompatActivity {
         }
         else{
             checkBoxUseDarkTheme.setChecked(false);
+        }
+
+        if(keep_screen_on){
+            checkBoxKeepScreenOn.setChecked(true);
+        }
+        else{
+            checkBoxKeepScreenOn.setChecked(false);
         }
 
         checkBoxUseDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -68,6 +78,25 @@ public class MainSettingsActivity extends AppCompatActivity {
             }
         });
 
+        checkBoxKeepScreenOn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                boolean checked = false;
+                if(compoundButton.isChecked()){
+                    checked = true;
+                }
+
+                SharedPreferences sharedPref = MainSettingsActivity.this.getSharedPreferences(
+                        getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putBoolean(getString(R.string.setting_keep_screen_on_pref), checked);
+                editor.commit();
+                
+            }
+        });
 
         buttonWipeDB.setOnClickListener(new View.OnClickListener() {
             @Override

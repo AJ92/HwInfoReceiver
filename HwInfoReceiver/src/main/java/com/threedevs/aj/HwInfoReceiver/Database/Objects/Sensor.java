@@ -5,26 +5,26 @@ package com.threedevs.aj.HwInfoReceiver.Database.Objects;
  */
 public class Sensor {
     private long id;
-    private long index;
+    private String index;
 
-    public Sensor(long id, long index){
+    public Sensor(long id, String index){
         this.id = id;
         this.index = index;
     }
 
-    public Sensor(long index){
+    public Sensor(String index){
         this.index = index;
     }
 
     public Sensor(){
-        this.index = -1;
+        this.index = "-1";
     }
 
-    public long getIndex() {
+    public String getHash() {
         return index;
     }
 
-    public void setIndex(long index) {
+    public void setHash(String index) {
         this.index = index;
     }
 

@@ -37,6 +37,9 @@
     <string name="setting_use_dark_theme">Use dark theme (you might need to restart app)</string>
     <string name="setting_use_dark_theme_pref">use_dark_theme</string>
 
+    <string name="setting_keep_screen_on">Keep screen on (when showing sensors)</string>
+    <string name="setting_keep_screen_on_pref">keep_screen_on</string>
+
     <string name="setting_wipe_db">Wipe database (can\'t be undone!!!)</string>
 
 
@@ -105,7 +108,23 @@
     <string name="sensor_slide_3_description">Long press on a sensor and you can set it up or remove it.</string>
 
     <string name="sensor_slide_4_title">Setup a sensor</string>
-    <string name="sensor_slide_4_description">Press on "Settings" in the previous menu. Enter any ID you can find in the HwInfoTransmitter application and you are done!</string>
+    <string name="sensor_slide_4_description">Press on "Settings" and select any reading from the list and the sensor is set up!</string>
+
+
+
+
+
+
+    <string name="appupdate_slide_1_title">Update</string>
+    <string name="appupdate_slide_1_description">The desktop application received an update! Visit blog.sigsegowl.xyz/?page_id=982 to download it.</string>
+
+    <string name="appupdate_slide_2_title">Sorry</string>
+    <string name="appupdate_slide_2_description">You have to set up your sensors again...</string>
+
+    <string name="appupdate_slide_3_title">But!</string>
+    <string name="appupdate_slide_3_description">You don\'t have to look up any numbers anymore :) Just choose from your phone the sensors you need!</string>
+
+
 
 
     <!-- Strings related to Settings -->

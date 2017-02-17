@@ -23,6 +23,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/checkBoxUseDarkTheme" />
 
+        <CheckBox
+            android:text="@string/setting_keep_screen_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxKeepScreenOn" />
+
         <Space
             android:layout_width="70dp"
             android:layout_height="70dp" />

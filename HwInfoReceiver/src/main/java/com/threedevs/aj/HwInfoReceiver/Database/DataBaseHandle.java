@@ -147,7 +147,7 @@ public class DataBaseHandle extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_INDEX, sensor.getIndex());
+        values.put(KEY_INDEX, sensor.getHash());
 
         // insert row
         long sensor_id = db.insert(TABLE_SENSORS, null, values);
@@ -212,7 +212,7 @@ public class DataBaseHandle extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_INDEX, sensor.getIndex());
+        values.put(KEY_INDEX, sensor.getHash());
 
         // updating row
         return db.update(TABLE_SENSORS, values, KEY_ID + " = ?",
@@ -267,7 +267,7 @@ public class DataBaseHandle extends SQLiteOpenHelper {
         deleteServerSensor(server_sensor_id);
 
         //-1 is fake sensor index
-        Sensor sensor = new Sensor(id, -1);
+        Sensor sensor = new Sensor(id, "-1");
         List<Setting> sensor_settings = getAllSettingsBySensor(sensor);
         for(int j = sensor_settings.size() -1; j >= 0; j--){
             deleteSetting(sensor_settings.get(j).getId());
@@ -348,8 +348,8 @@ public class DataBaseHandle extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Sensor sensor = new Sensor();
-                sensor.setId(c.getLong((c.getColumnIndex(KEY_ID))));
-                sensor.setIndex((c.getLong(c.getColumnIndex(KEY_INDEX))));
+                sensor.setId(c.getLong(c.getColumnIndex(KEY_ID)));
+                sensor.setHash(c.getString(c.getColumnIndex(KEY_INDEX)));
 
                 Log.i(TAG,
                         c.getLong((c.getColumnIndex(KEY_ID))) + " " +

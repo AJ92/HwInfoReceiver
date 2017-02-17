@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +13,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -25,11 +25,12 @@ import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
 import com.threedevs.aj.HwInfoReceiver.Networking.Networker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static java.lang.String.format;
 
-public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.SensorDialogListener{
+public class ServerActivityV2 extends ActionBarActivity{
 
     GridView gridView;
     GaugeAdapter gaugeAdapter;
@@ -46,6 +47,11 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
     private List<Sensor> sensors = new ArrayList<Sensor>();
     //holds actual sensor data...
     private List<GaugeData> sensor_gaugedatas = new ArrayList<GaugeData>();
+
+    private List<String>                sensor_hashes = new ArrayList<String>();
+    private HashMap<String, Integer>    sensor_hash_sensor_id = new HashMap<String, Integer>();
+    private HashMap<String, String>     sensor_hash_sensor_name = new HashMap<String, String>();
+
     //refresh time for server communication...
     private long timer_delay = 2000;
 
@@ -108,7 +114,7 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
 
                 //request stuff
                 for (int i = 0; i < sensors.size(); i++) {
-                    networker.SendDataToNetwork("get::" + Long.toString(sensors.get(i).getIndex()) + ";");
+                    networker.SendDataToNetwork("v2gd::" + sensors.get(i).getHash() + ";");
                 }
 
                 //read stuff
@@ -121,16 +127,22 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
                     String[] message_split = msg.split("::");
                     if (message_split.length > 0) {
 
-                        if (message_split[0].equals("reading")) {
+                        if (message_split[0].equals("v2sd")) {
 
                             try {
-                                String sensor_id = message_split[1];
-                                long id = Long.parseLong(sensor_id, 10);
-                                updateSensorData(id, msg);
+                                String sensor_hash = message_split[1];
+                                String sensor_name = message_split[2];
+
+                                if(!sensor_hashes.contains(sensor_hash)){
+                                    sensor_hashes.add(sensor_hash);
+                                }
+
+                                sensor_hash_sensor_name.put(sensor_hash, sensor_name);
+
+                                updateSensorData(sensor_hash, msg);
                             } catch (Exception e) {
                                 Log.e(TAG, e.toString());
                             }
-
 
                         }
                     }
@@ -141,45 +153,43 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         }
     };
 
-    private void updateSensorData(long index, String message) {
-        Log.e(TAG,"updating sensor at index: " + index);
-        for (int i = 0; i < sensors.size(); i++) {
-            if (sensors.get(i).getIndex() == index) {
+    private void updateSensorData(String hash, String message) {
+        if(!sensor_hash_sensor_id.containsKey(hash)){
+            return;
+        }
 
-                //split the message:
-                String[] split_message = message.split("::");
+        int sensor_index = sensor_hash_sensor_id.get(hash);
 
-                if (split_message.length > 0) {
-
-                    if (split_message[0].equals("reading")) {
-
-                        //update string
-                        String value = "";
-                        value = value + split_message[2] + ": " + split_message[3] + " " + split_message[4];
+        Log.e(TAG,"updating sensor at index: " + sensor_index);
 
 
-                        Log.e(TAG,"updating gauge at index: " + i);
-                        Log.e(TAG,"updating gauge name: " + split_message[2]);
+        //split the message:
+        String[] split_message = message.split("::");
 
-                        //update GaugeData
-                        GaugeData gd = sensor_gaugedatas.get(i);
-                        gd.setName(split_message[2]);
-                        gd.setUnit(split_message[4]);
-                        try {
-                            double value_double = Double.parseDouble(split_message[3]);
-                            gd.setValue(value_double);
-                        } catch (Exception e) {
-                            return;
-                        }
+        if (split_message.length > 0) {
 
-                        //update Gauge
-                        gd.updateViews();
+            if (split_message[0].equals("v2sd")) {
 
-                    }
+                Log.e(TAG,"updating gauge at index: " + sensor_index);
+                Log.e(TAG,"updating gauge name: " + split_message[2]);
+
+                //update GaugeData
+                GaugeData gd = sensor_gaugedatas.get(sensor_index);
+                gd.setName(split_message[2]);
+                gd.setUnit(split_message[4]);
+                try {
+                    double value_double = Double.parseDouble(split_message[3]);
+                    gd.setValue(value_double);
+                } catch (Exception e) {
+                    return;
                 }
+
+                //update Gauge
+                gd.updateViews();
 
             }
         }
+
         gaugeAdapter.notifyDataSetChanged();
         //gridView.invalidateViews();
         //gridView.setAdapter(gaugeAdapter);
@@ -195,17 +205,24 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         if(server != null) {
             sensors = db.getAllSensorsByServer(server);
             for(int i = 0; i < sensors.size(); i++) {
-                Log.i(TAG, "sensor id: " + sensors.get(i).getId() + "  sensor index: " + sensors.get(i).getIndex());
+                Log.i(TAG, "sensor id: " + sensors.get(i).getId() + "  sensor hash: " + sensors.get(i).getHash());
             }
             Log.i(TAG, sensors.size() + " sensors found...");
             showToast( sensors.size() + " sensors found...");
         }
 
+        //sensor_hash_sensor_id.clear();
+        //sensor_hash_sensor_name.clear();
+
         for(int i = 0; i < sensors.size(); i++){
             //construct GaugeData and CustomGauge
             GaugeData gd = new GaugeData();
-            gd.setName("id: " + sensors.get(i).getId());
+            gd.setName("hash: " + sensors.get(i).getHash());
             sensor_gaugedatas.add(gd);
+
+
+            sensor_hash_sensor_id.put(sensors.get(i).getHash(), i);
+            sensor_hash_sensor_name.put(sensors.get(i).getHash(), "hash: " + sensors.get(i).getHash());
         }
     }
 
@@ -275,17 +292,55 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         return true;
     }
 
-    public void showNoticeDialog(Sensor sensor) {
+    public void showNoticeDialog(final Sensor sensor) {
         // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = SensorDialog.newInstance(sensor.getId(), (int) sensor.getIndex());
-        dialog.show(getSupportFragmentManager(), "SensorDialog");
+
+        //get all sensors...
+        final ArrayList<String> sensor_name_list = new ArrayList<String>();
+
+
+        for(int i = 0; i < sensor_hashes.size(); i++){
+            sensor_name_list.add(sensor_hash_sensor_name.get(sensor_hashes.get(i)));
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ServerActivityV2.this);
+        builder.setTitle("Select Option");
+        builder.setItems(sensor_name_list.toArray(new CharSequence[sensor_name_list.size()]), new DialogInterface.OnClickListener() {
+                @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("value is", "" + which);
+
+                //update sensor
+                sensor.setHash(sensor_hashes.get(which));
+                db = new DataBaseHandle(getApplicationContext());
+                int updated = db.updateSensor(sensor);
+
+                Log.i(TAG, "updated sensor : " + updated);
+
+
+
+                //update gauge data and gauge
+                for(int i = 0; i < sensors.size(); i++) {
+                    if(sensors.get(i).getId() == sensor.getId()) {
+                        sensor_hash_sensor_id.put(sensor_hashes.get(which), i);
+
+                        GaugeData gs = sensor_gaugedatas.get(i);
+                        gs.setValue(0.0);
+                        gs.setValueMax(0.0);
+                        gs.setValueMin(0.0);
+                    }
+                }
+            }
+        });
+        builder.show();
+
     }
 
     public void addSensor(View v){
         if(server != null){
             //database
             db = new DataBaseHandle(getApplicationContext());
-            Sensor sensor = new Sensor(0);
+            Sensor sensor = new Sensor("0");
             long sensor_id = db.createSensor(sensor);
 
             db.createServerSensor(server.getId(), sensor_id);
@@ -321,39 +376,6 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
         timerHandler.postDelayed(timerRunnable, 0);
     }
 
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-
-        SensorDialog sd = (SensorDialog) dialog;
-        //check if it was successful
-        //if(((SensorDialog) dialog).isSuccess()) {
-            long sensor_id = sd.getSensorID();
-            int value = sd.getSensorIndex();
-            for (int i = 0; i < sensors.size(); i++) {
-                Sensor s = sensors.get(i);
-                if (s.getId() == sensor_id) {
-                    //update sensor
-                    s.setIndex(value);
-                    db = new DataBaseHandle(getApplicationContext());
-                    int updated = db.updateSensor(s);
-
-                    Log.i(TAG, "updated sensor : " + updated);
-
-                    //update gauge data and gauge
-                    GaugeData gs = sensor_gaugedatas.get(i);
-                    gs.setValue(0.0);
-                    gs.setValueMax(0.0);
-                    gs.setValueMin(0.0);
-
-                }
-            }
-        //}
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -394,6 +416,8 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
                 getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
 
         boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+        boolean keep_screen_on = sharedPref.getBoolean(getString(R.string.setting_keep_screen_on_pref), false);
+
 
         if(use_dark_theme) {
             setTheme(R.style.AppTheme_Dark);
@@ -402,6 +426,10 @@ public class ServerActivityV2 extends ActionBarActivity implements SensorDialog.
             setTheme(R.style.AppTheme);
         }
 
+
+        if(keep_screen_on){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_v2);

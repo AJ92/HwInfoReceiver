@@ -29,6 +29,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/checkBoxKeepScreenOn" />
 
+        <CheckBox
+            android:text="@string/setting_auto_connect_last_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxAutoConnectLastServer" />
+
         <Space
             android:layout_width="70dp"
             android:layout_height="70dp" />

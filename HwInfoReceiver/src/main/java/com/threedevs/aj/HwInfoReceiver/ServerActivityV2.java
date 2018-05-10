@@ -48,12 +48,12 @@ public class ServerActivityV2 extends ActionBarActivity{
     //holds actual sensor data...
     private List<GaugeData> sensor_gaugedatas = new ArrayList<GaugeData>();
 
-    private List<String>                sensor_hashes = new ArrayList<String>();
-    private HashMap<String, Integer>    sensor_hash_sensor_id = new HashMap<String, Integer>();
-    private HashMap<String, String>     sensor_hash_sensor_name = new HashMap<String, String>();
+    private static List<String>                sensor_hashes = new ArrayList<String>();
+    private static HashMap<String, Integer>    sensor_hash_sensor_id = new HashMap<String, Integer>();
+    private static HashMap<String, String>     sensor_hash_sensor_name = new HashMap<String, String>();
 
     //refresh time for server communication...
-    private long timer_delay = 2000;
+    private long timer_delay = 4000;
 
     private boolean destroyed = false;
 
@@ -70,7 +70,13 @@ public class ServerActivityV2 extends ActionBarActivity{
                 return;
             }
 
+            if(connections_failed  >=  max_connections_failed + 1) {
+                return;
+            }
+
+
             if(networker == null){
+                Log.e(TAG, "networker == null");
                 connections_failed += 1;
 
                 if(connections_failed >= max_connections_failed) {
@@ -85,7 +91,9 @@ public class ServerActivityV2 extends ActionBarActivity{
                 }
             }
             else{
+                Log.e(TAG, "networker != null");
                 if(!networker.isConnected()){
+                    Log.e(TAG, "    !networker.isConnected()");
                     connections_failed += 1;
 
                     if(connections_failed >= max_connections_failed) {
@@ -100,6 +108,7 @@ public class ServerActivityV2 extends ActionBarActivity{
                     }
                 }
                 else{
+                    Log.e(TAG, "    connections_failed = 0");
                     connections_failed = 0;
                 }
             }
@@ -149,7 +158,9 @@ public class ServerActivityV2 extends ActionBarActivity{
                 }
             }
             //work on UI here...
+
             timerHandler.postDelayed(this, timer_delay);
+
         }
     };
 
@@ -185,7 +196,7 @@ public class ServerActivityV2 extends ActionBarActivity{
                 }
 
                 //update Gauge
-                gd.updateViews();
+                //gd.updateViews();
 
             }
         }
@@ -441,6 +452,12 @@ public class ServerActivityV2 extends ActionBarActivity{
             } else {
                 server_ip = extras.getString("ip");
             }
+
+
+            sensor_hashes.clear();
+            sensor_hash_sensor_id.clear();
+            sensor_hash_sensor_name.clear();
+
         } else {
             server_ip = (String) savedInstanceState.getSerializable("ip");
             setTitle("Server ip: " + server_ip);
@@ -473,15 +490,28 @@ public class ServerActivityV2 extends ActionBarActivity{
         //start dat timer :)
         //give it some time to connect...
         timerHandler.postDelayed(timerRunnable, 0);
+
+
+        if(server_ip != null){
+            // Restore preferences
+            SharedPreferences settings = getSharedPreferences(getString(R.string.shared_pref_key), 0);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(getString(R.string.setting_last_server_pref), server_ip);
+
+            // Commit the edits!
+            editor.commit();
+
+        }
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
         destroyed = true;
-        if(networker!=null){
-            networker.cancel();
-        }
+        //if(networker!=null){
+        //    networker.cancel();
+        //}
     }
 
     public void showToast(CharSequence cs) {

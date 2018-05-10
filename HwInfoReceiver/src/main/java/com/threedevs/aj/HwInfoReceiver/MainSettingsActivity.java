@@ -22,6 +22,7 @@ public class MainSettingsActivity extends AppCompatActivity {
 
         boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
         boolean keep_screen_on = sharedPref.getBoolean(getString(R.string.setting_keep_screen_on_pref), false);
+        boolean auto_connect_last = sharedPref.getBoolean(getString(R.string.setting_auto_connect_last_server_pref), false);
 
 
         if(use_dark_theme) {
@@ -37,6 +38,7 @@ public class MainSettingsActivity extends AppCompatActivity {
 
         CheckBox checkBoxUseDarkTheme = (CheckBox) this.findViewById(R.id.checkBoxUseDarkTheme);
         CheckBox checkBoxKeepScreenOn = (CheckBox) this.findViewById(R.id.checkBoxKeepScreenOn);
+        CheckBox checkBoxAutoConnectLastServer = (CheckBox) this.findViewById(R.id.checkBoxAutoConnectLastServer);
         Button buttonWipeDB = (Button) this.findViewById(R.id.buttonWipeDB);
 
         if(use_dark_theme){
@@ -51,6 +53,13 @@ public class MainSettingsActivity extends AppCompatActivity {
         }
         else{
             checkBoxKeepScreenOn.setChecked(false);
+        }
+
+        if(auto_connect_last){
+            checkBoxAutoConnectLastServer.setChecked(true);
+        }
+        else{
+            checkBoxAutoConnectLastServer.setChecked(false);
         }
 
         checkBoxUseDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,6 +104,26 @@ public class MainSettingsActivity extends AppCompatActivity {
                 editor.putBoolean(getString(R.string.setting_keep_screen_on_pref), checked);
                 editor.commit();
                 
+            }
+        });
+
+        checkBoxAutoConnectLastServer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                boolean checked = false;
+                if(compoundButton.isChecked()){
+                    checked = true;
+                }
+
+                SharedPreferences sharedPref = MainSettingsActivity.this.getSharedPreferences(
+                        getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putBoolean(getString(R.string.setting_auto_connect_last_server_pref), checked);
+                editor.commit();
+
             }
         });
 

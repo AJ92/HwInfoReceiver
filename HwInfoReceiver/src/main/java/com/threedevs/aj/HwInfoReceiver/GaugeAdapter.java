@@ -67,6 +67,7 @@ public class GaugeAdapter extends BaseAdapter {
             gaugeData.setMinTextView(minTextView);
             gaugeData.setMaxTextView(maxTextView);
 
+            gaugeData.updateViews();
 
             return gridView;
         }

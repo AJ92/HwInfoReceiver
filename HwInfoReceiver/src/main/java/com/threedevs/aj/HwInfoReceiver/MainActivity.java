@@ -48,6 +48,8 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
                 getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
 
         boolean use_dark_theme = sharedPref.getBoolean(getString(R.string.setting_use_dark_theme_pref), false);
+        boolean auto_connect_last = sharedPref.getBoolean(getString(R.string.setting_auto_connect_last_server_pref), false);
+        String last_server = sharedPref.getString(getString(R.string.setting_last_server_pref), "");
 
         if(use_dark_theme) {
             setTheme(R.style.AppTheme_Dark);
@@ -102,6 +104,15 @@ public class MainActivity extends ActionBarActivity implements ServerDialog.Serv
 
             // Commit the edits!
             editor.commit();
+        }
+
+
+        if(auto_connect_last){
+            if(ip_list.size() > 0){
+                if(ip_list.contains(last_server)){
+                    connectToServer(ip_list.indexOf(last_server));
+                }
+            }
         }
     }
 

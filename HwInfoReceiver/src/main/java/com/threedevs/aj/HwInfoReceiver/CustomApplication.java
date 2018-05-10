@@ -42,6 +42,8 @@ public class CustomApplication extends Application {
         return nw;
     }
 
+
+
     public Networker getNetworker() {
         return nw;
     }

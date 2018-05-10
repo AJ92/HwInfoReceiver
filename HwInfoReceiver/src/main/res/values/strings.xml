@@ -40,6 +40,10 @@
     <string name="setting_keep_screen_on">Keep screen on (when showing sensors)</string>
     <string name="setting_keep_screen_on_pref">keep_screen_on</string>
 
+    <string name="setting_auto_connect_last_server">Connect to last server on start</string>
+    <string name="setting_auto_connect_last_server_pref">auto_connect_last_server_pref</string>
+    <string name="setting_last_server_pref">last_server_pref</string>
+
     <string name="setting_wipe_db">Wipe database (can\'t be undone!!!)</string>
 
 

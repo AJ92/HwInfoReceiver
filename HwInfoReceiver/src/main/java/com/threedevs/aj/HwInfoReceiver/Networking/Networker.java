@@ -1,5 +1,6 @@
 package com.threedevs.aj.HwInfoReceiver.Networking;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -67,8 +68,8 @@ public class Networker extends Thread {
             SocketAddress sockaddr = new InetSocketAddress(ip, 8881);
             nsocket = new Socket();
             nsocket.setTcpNoDelay(true);
-            nsocket.setSoTimeout(12000);
-            nsocket.connect(sockaddr, 12000); //12 second connection timeout
+            nsocket.setSoTimeout(60000);
+            nsocket.connect(sockaddr, 60000); //12 second connection timeout
             if (nsocket.isConnected()) {
                 nis = nsocket.getInputStream();
                 nos = nsocket.getOutputStream();
@@ -76,7 +77,7 @@ public class Networker extends Thread {
                 Log.i(TAG, "run: Waiting for inital data...");
                 byte[] buffer = new byte[4096];
                 int read = nis.read(buffer, 0, 4096); //This is blocking
-                while ((read != -1) || !isCancelled() || nsocket.isConnected()) {
+                while ((read != -1) && !isCancelled() && nsocket.isConnected()) {
                     byte[] tempdata = new byte[read];
                     System.arraycopy(buffer, 0, tempdata, 0, read);
                     String datastring = new String(tempdata);
@@ -135,21 +136,46 @@ public class Networker extends Thread {
     }
 
 
-    public void SendDataToNetwork(String cmd) { //You run this from the menu_main thread.
-        try {
-            if (nsocket.isConnected()) {
-                Log.i(TAG, "SendDataToNetwork: Writing received message to socket");
-                nos.write(cmd.getBytes());
-            } else {
-                Log.i(TAG, "SendDataToNetwork: Cannot send message. Socket is closed");
+    private class SendNetworkMessage extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            int count = params.length;
+            for (int i = 0; i < count; i++) {
+                try {
+                    if (nsocket.isConnected()) {
+                        Log.i(TAG, "SendDataToNetwork: Writing received message to socket");
+                        nos.write(params[i].getBytes());
+                    } else {
+                        Log.i(TAG, "SendDataToNetwork: Cannot send message. Socket is closed");
+                    }
+                } catch (Exception e) {
+                    Log.i(TAG, "SendDataToNetwork: Message send failed. Caught an exception: " + e);
+                    e.printStackTrace();
+                    cancelled = true;
+                }
             }
-        } catch (Exception e) {
-            Log.i(TAG, "SendDataToNetwork: Message send failed. Caught an exception: " + e);
+            return "Done";
         }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    }
+
+    public void SendDataToNetwork(String cmd) { //You run this from the menu_main thread.
+        new SendNetworkMessage().execute(cmd);
     }
 
     public boolean isConnected(){
-        if(nsocket != null){
+        if(nsocket != null && !cancelled){
             if(nsocket.isConnected()){
                 return true;
             }

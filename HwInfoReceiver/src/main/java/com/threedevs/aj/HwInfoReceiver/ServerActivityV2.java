@@ -61,6 +61,9 @@ public class ServerActivityV2 extends ActionBarActivity{
     private int max_connections_failed = 5;
 
 
+    static final int APPLICATION_SETTINGS_REQUEST = 1;  // The request code
+
+
     private Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
 
@@ -228,12 +231,13 @@ public class ServerActivityV2 extends ActionBarActivity{
         for(int i = 0; i < sensors.size(); i++){
             //construct GaugeData and CustomGauge
             GaugeData gd = new GaugeData();
-            gd.setName("hash: " + sensors.get(i).getHash());
+            //gd.setName("hash: " + sensors.get(i).getHash());
+            gd.setName("Loading...");
             sensor_gaugedatas.add(gd);
-
 
             sensor_hash_sensor_id.put(sensors.get(i).getHash(), i);
             sensor_hash_sensor_name.put(sensors.get(i).getHash(), "hash: " + sensors.get(i).getHash());
+            //sensor_hash_sensor_name.put(sensors.get(i).getHash(), "Loading...");
         }
     }
 
@@ -414,7 +418,7 @@ public class ServerActivityV2 extends ActionBarActivity{
 
         if (id == R.id.action_settings) {
             Intent si = new Intent(ServerActivityV2.this, MainSettingsActivity.class);
-            ServerActivityV2.this.startActivity(si);
+            ServerActivityV2.this.startActivityForResult(si, APPLICATION_SETTINGS_REQUEST);
             return true;
         }
 
@@ -512,6 +516,15 @@ public class ServerActivityV2 extends ActionBarActivity{
         //if(networker!=null){
         //    networker.cancel();
         //}
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == APPLICATION_SETTINGS_REQUEST) {
+            reLoadSensorsFromDataBase();
+            createGridView();
+        }
     }
 
     public void showToast(CharSequence cs) {

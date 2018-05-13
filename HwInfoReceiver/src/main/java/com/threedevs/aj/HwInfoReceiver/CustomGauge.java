@@ -251,7 +251,15 @@ public class CustomGauge extends View {
     }
 
 	public void setValue(float value) {
-		mValue = value;
+        if(value > mEndValue){
+            mValue = mEndValue;
+        }
+        else if(value < mStartValue){
+            mValue = mStartValue;
+        }
+        else {
+            mValue = value;
+        }
 		mPoint = (float)(mStartAngel + (mValue-mStartValue) * mPointAngel);
 		//invalidate();
 	}
@@ -283,42 +291,6 @@ public class CustomGauge extends View {
 
     public void setTitle(String title){
         mTitle = title;
-        if(title.equals("%")){
-            setMinValue(0.0f);
-            setMaxValue(100.0f);
-        }
-        else if(title.equals("°C")){
-            setMinValue(0.0f);
-            setMaxValue(110.0f);
-        }
-        else if(title.equals("MB")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("V")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("MHz")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("Yes/No")){
-            setMinValue(0.0f);
-            setMaxValue(1.0f);
-        }
-        else if(title.equals("W")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("RPM")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("MB/s")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("% of TDP")){
-            setMinValue(0.0f);
-        }
-        else if(title.equals("Gbps")){
-            setMinValue(0.0f);
-        }
     }
 
 

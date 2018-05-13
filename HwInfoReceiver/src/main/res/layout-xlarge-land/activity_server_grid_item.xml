@@ -27,7 +27,7 @@
         custom_gauge:endValue="1000"
         custom_gauge:sweepAngel="270"
         custom_gauge:titleValue="loading"
-        custom_gauge:titleSize="25dp"
+        custom_gauge:titleSize="25sp"
         android:layout_width="130dp"
         android:layout_height="130dp" />
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="20sp">
         </TextView>
 
         <TextView
@@ -52,7 +52,7 @@
             android:text="~"
             android:layout_margin="1dp"
             android:textStyle="normal|bold"
-            android:textSize="20dp">
+            android:textSize="20sp">
         </TextView>
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="20sp">
         </TextView>
 
         <TextView
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="20dp">
+            android:textSize="20sp">
         </TextView>
 
     </LinearLayout>

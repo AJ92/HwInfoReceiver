@@ -31,7 +31,7 @@
         custom_gauge:endValue="1000"
         custom_gauge:sweepAngel="270"
         custom_gauge:titleValue="loading"
-        custom_gauge:titleSize="14dp"
+        custom_gauge:titleSize="14sp"
         />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="10dp">
+            android:textSize="10sp">
         </TextView>
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="10dp"
+            android:textSize="10sp"
             android:textStyle="normal|bold">
         </TextView>
 
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="10dp" >
+            android:textSize="10sp" >
         </TextView>
 
         <TextView
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="~"
             android:layout_margin="1dp"
-            android:textSize="10dp" >
+            android:textSize="10sp" >
         </TextView>
 
     </LinearLayout>

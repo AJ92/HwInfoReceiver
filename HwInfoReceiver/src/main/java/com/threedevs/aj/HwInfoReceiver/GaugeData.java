@@ -13,6 +13,9 @@ public class GaugeData {
     private double value_min = 0.0;
 
     private boolean first_value_set = false;
+    private boolean first_value_set_gauge = false;
+
+    private boolean auto_adjust_scale = false;
 
     private int precision = 5;
 
@@ -33,16 +36,13 @@ public class GaugeData {
         if(view!=null){
             view.setTitle(unit);
             view.setValue((float)value_current);
-            if(view.getMaxValue() < value_max){
-                view.setMaxValue((float)value_max);
-            }
-            if(view.getMaxValue() < value_max){
-                view.setMaxValue((float)value_max);
-            }
-            if(view.getMinValue() > value_min){
-                view.setMinValue((float)value_min);
+
+            if(auto_adjust_scale && first_value_set) {
+                view.setMaxValue((float) value_max);
+                view.setMinValue((float) value_min);
             }
 
+            first_value_set_gauge = true;
             view.update();
         }
 
@@ -58,6 +58,10 @@ public class GaugeData {
         if(max_view!=null){
             max_view.setText("Max: " + format("%." + precision + "f", value_max));
         }
+    }
+
+    public void setAutoAdjustScale(boolean adjust){
+        auto_adjust_scale = adjust;
     }
 
     public void setGauge(CustomGauge g){

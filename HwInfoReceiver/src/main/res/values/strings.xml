@@ -44,6 +44,19 @@
     <string name="setting_auto_connect_last_server_pref">auto_connect_last_server_pref</string>
     <string name="setting_last_server_pref">last_server_pref</string>
 
+    <string name="setting_custom_font_scale_lbl">Custom font scale</string>
+    <string name="setting_custom_font_scale_pref">custom_font_scale_pref</string>
+    <string name="setting_custom_font_scale_value_pref">custom_font_scale_value_pref</string>
+
+    <string name="setting_custom_temp_scale_lbl">Custom temperature scale (°C)</string>
+    <string name="setting_custom_temp_scale_pref">custom_temp_scale_pref</string>
+
+    <string name="setting_custom_temp_scale_min">min. temp.</string>
+    <string name="setting_custom_temp_scale_min_pref">custom_temp_scale_min_pref</string>
+
+    <string name="setting_custom_temp_scale_max">max. temp.</string>
+    <string name="setting_custom_temp_scale_max_pref">custom_temp_scale_max_pref</string>
+
     <string name="setting_wipe_db">Wipe database (can\'t be undone!!!)</string>
 
 

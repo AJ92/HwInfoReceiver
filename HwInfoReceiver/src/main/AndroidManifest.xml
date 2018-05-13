@@ -28,7 +28,8 @@
         <activity
             android:name=".ApplicationSettingsActivity"
             android:label="@string/title_activity_application_settings" />
-        <activity android:name=".MainSettingsActivity"></activity>
+        <activity android:name=".MainSettingsActivity"
+        android:label="@string/title_activity_application_settings"/>
     </application>
 
 </manifest>

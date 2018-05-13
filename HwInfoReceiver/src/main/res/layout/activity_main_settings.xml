@@ -8,42 +8,177 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.threedevs.aj.HwInfoReceiver.MainSettingsActivity">
+    tools:context="com.threedevs.aj.HwInfoReceiver.MainSettingsActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="9dp"
-        android:orientation="vertical"
-        android:id="@+id/linearlayout">
+        android:layout_height="match_parent">
 
-        <CheckBox
-            android:text="@string/setting_use_dark_theme"
+        <LinearLayout
+            android:id="@+id/linearlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBoxUseDarkTheme" />
+            android:layout_marginBottom="9dp"
+            android:orientation="vertical">
 
-        <CheckBox
-            android:text="@string/setting_keep_screen_on"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBoxKeepScreenOn" />
+            <CheckBox
+                android:id="@+id/checkBoxUseDarkTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_use_dark_theme" />
 
-        <CheckBox
-            android:text="@string/setting_auto_connect_last_server"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBoxAutoConnectLastServer" />
+            <CheckBox
+                android:id="@+id/checkBoxKeepScreenOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_keep_screen_on" />
 
-        <Space
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+            <CheckBox
+                android:id="@+id/checkBoxAutoConnectLastServer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_auto_connect_last_server" />
 
-        <Button
-            android:text="@string/setting_wipe_db"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonWipeDB" />
+            <CheckBox
+                android:id="@+id/checkBoxCustomFontScale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_custom_font_scale_lbl" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/buttonCustomFontScaleSmaller"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="-" />
+
+                        <Button
+                            android:id="@+id/buttonCustomFontScaleLarger"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="+" />
+
+                        <TextView
+                            android:id="@+id/textViewCustomFontScale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="?"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkBoxCustomTemperatureScale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_custom_temp_scale_lbl" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/setting_custom_temp_scale_min" />
+
+                        <EditText
+                            android:id="@+id/editTextCustomTemperatureScaleMin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:imeOptions="actionUnspecified|actionDone"
+                            android:inputType="numberSigned" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/setting_custom_temp_scale_max" />
+
+                        <EditText
+                            android:id="@+id/editTextCustomTemperatureScaleMax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:imeOptions="normal|actionDone"
+                            android:inputType="numberSigned" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="70dp"
+                android:layout_height="70dp" />
+
+            <Button
+                android:id="@+id/buttonWipeDB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_wipe_db" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

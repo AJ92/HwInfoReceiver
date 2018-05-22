@@ -35,13 +35,12 @@ public class GaugeData {
     public void updateViews(){
         if(view!=null){
             view.setTitle(unit);
-            view.setValue((float)value_current);
 
             if(auto_adjust_scale && first_value_set) {
                 view.setMaxValue((float) value_max);
                 view.setMinValue((float) value_min);
             }
-
+            view.setValue((float)value_current);
             first_value_set_gauge = true;
             view.update();
         }
@@ -126,6 +125,12 @@ public class GaugeData {
         }
         else if(unit.equals("Gbps")){
             precision = 1;
+        }
+        else if(unit.equals("x")){
+            precision = 0;
+        }
+        else{
+            precision = 3;
         }
     }
 

@@ -268,8 +268,14 @@ public class CustomGauge extends View {
 		return mValue;
 	}
 
-    public void setMaxValue(float max){
+    public void setInitialMaxValue(float max){
         mEndValue = max;
+        // calculating one point sweep
+        mPointAngel = ((double) Math.abs(mSweepAngel) / (mEndValue - mStartValue));
+    }
+
+    public void setMaxValue(float max){
+        mEndValue = Math.max(max, mEndValue);
         // calculating one point sweep
         mPointAngel = ((double) Math.abs(mSweepAngel) / (mEndValue - mStartValue));
     }
@@ -278,8 +284,14 @@ public class CustomGauge extends View {
         return mEndValue;
     }
 
-    public void setMinValue(float min){
+    public void setInitialMinValue(float min){
         mStartValue = min;
+        // calculating one point sweep
+        mPointAngel = ((double) Math.abs(mSweepAngel) / (mEndValue - mStartValue));
+    }
+
+    public void setMinValue(float min){
+        mStartValue = Math.min(min, mStartValue);
         // calculating one point sweep
         mPointAngel = ((double) Math.abs(mSweepAngel) / (mEndValue - mStartValue));
     }

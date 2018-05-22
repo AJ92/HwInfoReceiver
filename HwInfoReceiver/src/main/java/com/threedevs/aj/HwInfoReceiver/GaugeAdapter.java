@@ -96,55 +96,92 @@ public class GaugeAdapter extends BaseAdapter {
 
             String unit = gaugeData.getUnit();
             if(unit.equals("%")){
-                gauge.setMinValue(0.0f);
-                gauge.setMaxValue(100.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
+                gauge.setInitialMaxValue(100.0f);
             }
             else if(unit.equals("°C")){
                 if(custom_temp_scale) {
-                    gauge.setMinValue(custom_temp_scale_min);
-                    gauge.setMaxValue(custom_temp_scale_max);
+                    gauge.setInitialMinValue(custom_temp_scale_min);
+                    gauge.setInitialMaxValue(custom_temp_scale_max);
                 }
                 else {
-                    gauge.setMinValue(0.0f);
-                    gauge.setMaxValue(100.0f);
+                    gauge.setValue(0.0f);
+                    gauge.setInitialMinValue(0.0f);
+                    gauge.setInitialMaxValue(100.0f);
                     gaugeData.setAutoAdjustScale(true);
                 }
             }
             else if(unit.equals("MB")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("V")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("MHz")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("Yes/No")){
-                //gauge.setMinValue(0.0f);
-                //gauge.setMaxValue(1.0f);
-                gaugeData.setAutoAdjustScale(true);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(1.0f);
+                //gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("W")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("RPM")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("MB/s")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("% of TDP")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
             else if(unit.equals("Gbps")){
-                //gauge.setMinValue(0.0f);
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
+                gaugeData.setAutoAdjustScale(true);
+            }
+            else if(unit.equals("x")){
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
+                gaugeData.setAutoAdjustScale(true);
+            }
+            else if(unit.equals("KB/s")){
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
+                gaugeData.setAutoAdjustScale(true);
+            }
+            else{
+                gauge.setValue(0.0f);
+                gauge.setInitialMinValue(0.0f);
+                gauge.setInitialMaxValue(0.001f);
                 gaugeData.setAutoAdjustScale(true);
             }
 

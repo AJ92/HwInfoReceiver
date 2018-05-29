@@ -3,33 +3,35 @@ package com.threedevs.aj.HwInfoReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.view.View;
-import android.view.MenuInflater;
 import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import com.threedevs.aj.HwInfoReceiver.Database.DataBaseHandle;
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Server;
 import com.threedevs.aj.HwInfoReceiver.Networking.Networker;
 
-import static com.threedevs.aj.HwInfoReceiver.R.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.threedevs.aj.HwInfoReceiver.R.id;
+import static com.threedevs.aj.HwInfoReceiver.R.layout;
+import static com.threedevs.aj.HwInfoReceiver.R.menu;
 
 
-public class MainActivity extends ActionBarActivity implements ServerDialog.ServerDialogListener {
+public class MainActivity extends AppCompatActivity implements ServerDialog.ServerDialogListener {
 
     private Networker networker = null;
     private DataBaseHandle db;

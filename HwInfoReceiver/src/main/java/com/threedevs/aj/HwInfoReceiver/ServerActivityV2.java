@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -30,7 +30,7 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class ServerActivityV2 extends ActionBarActivity{
+public class ServerActivityV2 extends AppCompatActivity{
 
     GridView gridView;
     GaugeAdapter gaugeAdapter;

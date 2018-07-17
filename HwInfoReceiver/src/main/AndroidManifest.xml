@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ServerActivityV2" />
+        <activity android:name=".ServerActivityV2" android:hardwareAccelerated="true" />
         <activity android:name=".IntroActivity" />
         <activity android:name=".IntroServerConnectionActivity" />
         <activity android:name=".IntroSensorsActivity" />

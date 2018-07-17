@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HwInfoReceiver.iml" filepath="$PROJECT_DIR$/HwInfoReceiver.iml" />
       <module fileurl="file://$PROJECT_DIR$/HwInfoReceiver/HwInfoReceiver-HwInfoReceiver.iml" filepath="$PROJECT_DIR$/HwInfoReceiver/HwInfoReceiver-HwInfoReceiver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphs/HwInfoReceiver-graphs.iml" filepath="$PROJECT_DIR$/graphs/HwInfoReceiver-graphs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MPAndroidChart/MPChartLib/MPChartLib.iml" filepath="$PROJECT_DIR$/MPAndroidChart/MPChartLib/MPChartLib.iml" />
     </modules>
   </component>
 </project>

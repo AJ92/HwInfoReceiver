@@ -1,6 +1,20 @@
 package com.threedevs.aj.HwInfoReceiver;
 
+import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static java.lang.String.format;
 
@@ -22,40 +36,54 @@ public class GaugeData {
     private String name = "";
     private String unit = "";
 
-    private CustomGauge view;
+
+    public static final int TYPE_GAUGE = 1;
+    public static final int TYPE_GRAPH = 2;
+
+    private int type = GaugeData.TYPE_GRAPH;
+
+    //if it's a gauge
+    private CustomGauge gauge_view;
     private TextView name_view;
     private TextView cur_view;
     private TextView min_view;
     private TextView max_view;
 
-    public GaugeData(){
+    //if it's a graph
+    private LineChart graph_view;
 
+    public GaugeData(){
     }
 
     public void updateViews(){
-        if(view!=null){
-            view.setTitle(unit);
+        if(type == TYPE_GAUGE) {
+            if (gauge_view != null) {
+                gauge_view.setTitle(unit);
 
-            if(auto_adjust_scale && first_value_set) {
-                view.setMaxValue((float) value_max);
-                view.setMinValue((float) value_min);
+                if (auto_adjust_scale && first_value_set) {
+                    gauge_view.setMaxValue((float) value_max);
+                    gauge_view.setMinValue((float) value_min);
+                }
+                gauge_view.setValue((float) value_current);
+                first_value_set_gauge = true;
+                gauge_view.update();
             }
-            view.setValue((float)value_current);
-            first_value_set_gauge = true;
-            view.update();
-        }
 
-        if(name_view!=null){
-            name_view.setText(name);
+            if (name_view != null) {
+                name_view.setText(name);
+            }
+            if (cur_view != null) {
+                cur_view.setText("Cur: " + format("%." + precision + "f", value_current));
+            }
+            if (min_view != null) {
+                min_view.setText("Min: " + format("%." + precision + "f", value_min));
+            }
+            if (max_view != null) {
+                max_view.setText("Max: " + format("%." + precision + "f", value_max));
+            }
         }
-        if(cur_view!=null){
-            cur_view.setText("Cur: " + format("%." + precision + "f", value_current));
-        }
-        if(min_view!=null){
-            min_view.setText("Min: " + format("%." + precision + "f", value_min));
-        }
-        if(max_view!=null){
-            max_view.setText("Max: " + format("%." + precision + "f", value_max));
+        else if(type == TYPE_GRAPH){
+            //graph_view.invalidate();
         }
     }
 
@@ -63,8 +91,12 @@ public class GaugeData {
         auto_adjust_scale = adjust;
     }
 
-    public void setGauge(CustomGauge g){
-        view = g;
+    public void setGraphView(LineChart g){
+        graph_view = g;
+    }
+
+    public void setGaugeView(CustomGauge g){
+        gauge_view = g;
     }
 
     public void setTitleTextView(TextView tv){
@@ -138,12 +170,72 @@ public class GaugeData {
         return unit;
     }
 
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, name + " " + unit);
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColors(Color.GREEN);
+        set.setCircleColor(Color.GREEN);
+        set.setCircleHoleColor(Color.GREEN);
+        set.setLineWidth(2f);
+        set.setCircleRadius(1f);
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(10f);
+        set.setDrawCircles(true);
+        set.setDrawValues(false);
+        set.setDrawFilled(true);
+        set.setFillColor(Color.GREEN);
+        return set;
+    }
+
     public void setValue(double value){
         value_current = value;
+
+        if(type == TYPE_GRAPH){
+            if(graph_view != null) {
+                // set manual x bounds to have nice steps
+                //graph_view.getViewport().setMinX(dates.get(0).getTime());
+                //graph_view.getViewport().setMaxX(dates.get(dates.size()-1).getTime());
+                //graph_view.getViewport().setXAxisBoundsManual(true);
+
+                LineData data = graph_view.getData();
+                if (data != null) {
+                    ILineDataSet set = data.getDataSetByIndex(0);
+                    if(set == null) {
+                        set = createSet();
+                        data.addDataSet(set);
+                    }
+
+                    data.addEntry(new Entry(set.getEntryCount(), (float)value_current), 0);
+
+                    // let the chart know it's data has changed
+                    data.notifyDataChanged();
+                    graph_view.notifyDataSetChanged();
+                    //graph_view.invalidate();
+
+                    // limit the number of visible entries
+                    graph_view.setVisibleXRangeMaximum(45);
+
+                    // move to the latest entry
+                    graph_view.moveViewToX(data.getEntryCount());
+
+                }
+            }
+        }
+
+        if(type == TYPE_GAUGE){
+            updateViews();
+        }
+
+
+
+        Log.i("setValue", "value_current: " + value_current);
+
         if(first_value_set == false){
             first_value_set = true;
             value_max = value;
             value_min = value;
+
+            Log.i("setValue", "adding value_series");
             return;
         }
         value_max = Math.max(value_max,value);
@@ -172,6 +264,10 @@ public class GaugeData {
 
     public int getPrecision(){
         return precision;
+    }
+
+    public int getType(){
+        return type;
     }
 
 }

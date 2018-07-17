@@ -64,7 +64,7 @@ public class Networker extends Thread {
 
     public void run() {
         try {
-            Log.i(TAG, "run: Creating socket");
+            //Log.i(TAG, "run: Creating socket");
             SocketAddress sockaddr = new InetSocketAddress(ip, 8881);
             nsocket = new Socket();
             nsocket.setTcpNoDelay(true);
@@ -73,8 +73,8 @@ public class Networker extends Thread {
             if (nsocket.isConnected()) {
                 nis = nsocket.getInputStream();
                 nos = nsocket.getOutputStream();
-                Log.i(TAG, "run: Socket created, streams assigned");
-                Log.i(TAG, "run: Waiting for inital data...");
+                //Log.i(TAG, "run: Socket created, streams assigned");
+                //Log.i(TAG, "run: Waiting for inital data...");
                 byte[] buffer = new byte[4096];
                 int read = nis.read(buffer, 0, 4096); //This is blocking
                 while ((read != -1) && !isCancelled() && nsocket.isConnected()) {
@@ -83,7 +83,7 @@ public class Networker extends Thread {
                     String datastring = new String(tempdata);
                     messages.add(datastring);
                     mHandler.post(mUpdateResults);
-                    Log.i(TAG, "run: Got some data");
+                    //Log.i(TAG, "run: Got some data");
                     read = nis.read(buffer, 0, 4096); //This is blocking
                 }
             }
@@ -120,7 +120,7 @@ public class Networker extends Thread {
     private void updateResultsInUi(ArrayList<String> copied_messages) {
         // Back in the UI thread -- update our UI elements based on the data in mResults
         for(int i = 0; i < copied_messages.size(); i++){
-            Log.i(TAG, "message: " + copied_messages.get(i));
+            //Log.i(TAG, "message: " + copied_messages.get(i));
             messages_safe.add(copied_messages.get(i));
         }
     }
@@ -144,7 +144,7 @@ public class Networker extends Thread {
             for (int i = 0; i < count; i++) {
                 try {
                     if (nsocket.isConnected()) {
-                        Log.i(TAG, "SendDataToNetwork: Writing received message to socket");
+                        //Log.i(TAG, "SendDataToNetwork: Writing received message to socket");
                         nos.write(params[i].getBytes());
                     } else {
                         Log.i(TAG, "SendDataToNetwork: Cannot send message. Socket is closed");

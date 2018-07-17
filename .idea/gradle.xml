@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/HwInfoReceiver" />
+            <option value="$PROJECT_DIR$/MPAndroidChart/MPChartLib" />
+            <option value="$PROJECT_DIR$/graphs" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

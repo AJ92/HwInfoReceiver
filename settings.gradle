@@ -1,1 +1,2 @@
-include ':HwInfoReceiver'
+include ':HwInfoReceiver', ':graphs', ':MPChartLib'
+project(':MPChartLib').projectDir = new File('MPAndroidChart/MPChartLib')

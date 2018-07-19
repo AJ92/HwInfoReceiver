@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.threedevs.aj.HwInfoReceiver.Database.Objects.Sensor;
@@ -23,14 +24,25 @@ public class CustomApplication extends Application {
 
     public static final String PREFS_NAME = "HwR_Prefs";
 
+    private PowerManager.WakeLock wakeLock;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "HwR-WakeLock");
+        wakeLock.acquire();
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
+        if(wakeLock != null){
+            if(wakeLock.isHeld()){
+                wakeLock.release();
+            }
+        }
     }
 
     public Networker createNetworker(String ip){

@@ -245,10 +245,12 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 // if disabled, scaling can be done on x- and y-axis separately
                 graph.setPinchZoom(false);
                 // enable scaling
-                graph.setScaleEnabled(false);
+                graph.setScaleEnabled(true);
                 graph.setDrawGridBackground(false);
                 // set an alternative background color
                 graph.setBackgroundColor(Color.TRANSPARENT);
+
+                graph.animateX(1000);
 
                 //Axes
                 XAxis xl = graph.getXAxis();
@@ -279,12 +281,12 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 // reset all limit lines to avoid overlapping lines
                 //leftAxis.removeAllLimitLines();
                 //leftAxis.addLimitLine(ll);
-                // limit lines are drawn behind data (and not on top)
-                leftAxis.setDrawLimitLinesBehindData(true);
+
+                leftAxis.setDrawLimitLinesBehindData(false);
 
                 //legend
                 Legend l = graph.getLegend();
-                l.setForm(Legend.LegendForm.CIRCLE);
+                l.setForm(Legend.LegendForm.LINE);
                 l.setTextColor(Color.WHITE);
                 l.setEnabled(true);
 
@@ -294,49 +296,49 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 data.setDrawValues(false);
                 // add empty data
                 graph.setData(data);
+                gaugeData.setGraphView(graph);
 
-                /*
                 if (unit.equals("%")) {
-                    leftAxis.setAxisMaximum(100.0f);
-                    leftAxis.setAxisMinimum(0f);
+                    gaugeData.setValue(0.0f);
+                    gaugeData.setValue(100.0f);
+                    leftAxis.setAxisMaximum(100f);
                 } else if (unit.equals("°C")) {
                     if (custom_temp_scale) {
-                        leftAxis.setAxisMaximum(custom_temp_scale_max);
-                        leftAxis.setAxisMinimum(custom_temp_scale_min);
+                        gaugeData.setValue(custom_temp_scale_min);
+                        gaugeData.setValue(custom_temp_scale_max);
                     } else {
-                        leftAxis.setAxisMaximum(100.0f);
-                        leftAxis.setAxisMinimum(0f);
+                        gaugeData.setValue(0.0f);
+                        gaugeData.setValue(100f);
+                        leftAxis.setAxisMaximum(100f);
                     }
                 } else if (unit.equals("MB")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("V")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("MHz")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("Yes/No")) {
-                    leftAxis.setAxisMaximum(1.0f);
-                    leftAxis.setAxisMinimum(0f);
+                    gaugeData.setValue(1.0f);
+                    gaugeData.setValue(0f);
                     //gaugeData.setAutoAdjustScale(true);
                 } else if (unit.equals("W")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("RPM")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("MB/s")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("% of TDP")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("Gbps")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("x")) {
-
+                    gaugeData.setValue(0f);
                 } else if (unit.equals("KB/s")) {
-
+                    gaugeData.setValue(0f);
                 } else {
-
+                    gaugeData.setValue(0f);
                 }
-                */
 
-                gaugeData.setGraphView(graph);
                 break;
             }
         }

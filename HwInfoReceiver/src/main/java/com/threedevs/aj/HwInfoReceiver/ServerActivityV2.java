@@ -98,7 +98,7 @@ public class ServerActivityV2 extends AppCompatActivity{
                 }
             }
             else{
-                Log.e(TAG, "networker != null");
+                //Log.e(TAG, "networker != null");
                 if(!networker.isConnected()){
                     Log.e(TAG, "    !networker.isConnected()");
                     connections_failed += 1;
@@ -115,7 +115,7 @@ public class ServerActivityV2 extends AppCompatActivity{
                     }
                 }
                 else{
-                    Log.e(TAG, "    connections_failed = 0");
+                    //Log.e(TAG, "    connections_failed = 0");
                     connections_failed = 0;
                 }
             }

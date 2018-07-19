@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -184,6 +185,7 @@ public class GaugeData {
         set.setDrawValues(false);
         set.setDrawFilled(true);
         set.setFillColor(Color.GREEN);
+        set.setFillAlpha(255);
         return set;
     }
 
@@ -205,6 +207,7 @@ public class GaugeData {
                         data.addDataSet(set);
                     }
 
+                    set.setLabel(name + " " + unit);
                     data.addEntry(new Entry(set.getEntryCount(), (float)value_current), 0);
 
                     // let the chart know it's data has changed
@@ -217,7 +220,6 @@ public class GaugeData {
 
                     // move to the latest entry
                     graph_view.moveViewToX(data.getEntryCount());
-
                 }
             }
         }
@@ -240,6 +242,40 @@ public class GaugeData {
         }
         value_max = Math.max(value_max,value);
         value_min = Math.min(value_min,value);
+
+        YAxis leftAxis = graph_view.getAxisLeft();
+
+
+        LimitLine llcur = new LimitLine((float)value_current,  (int)value_current + "");
+        llcur.setLineWidth(1f);
+        llcur.setLineColor(Color.WHITE);
+        if(value_max - value_current < value_current - value_min) {
+            llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        }
+        else{
+            llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        }
+        llcur.setTextSize(8f);
+        llcur.setTextColor(Color.WHITE);
+
+        LimitLine llmin = new LimitLine((float)value_min,  (int)value_min + "");
+        llmin.setLineWidth(1f);
+        llmin.setLineColor(Color.BLUE);
+        llmin.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        llmin.setTextSize(8f);
+        llmin.setTextColor(Color.BLUE);
+
+        LimitLine llmax = new LimitLine((float)value_max,  (int)value_max + "");
+        llmax.setLineWidth(1f);
+        llmax.setLineColor(Color.RED);
+        llmax.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+        llmax.setTextSize(8f);
+        llmax.setTextColor(Color.RED);
+        // reset all limit lines to avoid overlapping lines
+        leftAxis.removeAllLimitLines();
+        leftAxis.addLimitLine(llcur);
+        leftAxis.addLimitLine(llmin);
+        leftAxis.addLimitLine(llmax);
     }
 
     public double getValue(){

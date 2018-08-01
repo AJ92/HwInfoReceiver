@@ -29,6 +29,8 @@ public class MainSettingsActivity extends AppCompatActivity {
         boolean keep_screen_on = sharedPref.getBoolean(getString(R.string.setting_keep_screen_on_pref), false);
         boolean auto_connect_last = sharedPref.getBoolean(getString(R.string.setting_auto_connect_last_server_pref), false);
 
+        boolean use_graph = sharedPref.getBoolean(getString(R.string.setting_use_graph_pref), false);
+
         boolean custom_font_scale = sharedPref.getBoolean(getString(R.string.setting_custom_font_scale_pref), false);
         int custom_font_scale_value = sharedPref.getInt(getString(R.string.setting_custom_font_scale_value_pref), 100);
 
@@ -52,6 +54,8 @@ public class MainSettingsActivity extends AppCompatActivity {
         CheckBox checkBoxKeepScreenOn = (CheckBox) this.findViewById(R.id.checkBoxKeepScreenOn);
         CheckBox checkBoxAutoConnectLastServer = (CheckBox) this.findViewById(R.id.checkBoxAutoConnectLastServer);
 
+        CheckBox checkBoxUseGraph = (CheckBox) this.findViewById(R.id.checkBoxUseGraph);
+
         CheckBox checkBoxCustomFontScale = (CheckBox) this.findViewById(R.id.checkBoxCustomFontScale);
         Button buttonCustomFontScaleSmaller = (Button) this.findViewById(R.id.buttonCustomFontScaleSmaller);
         Button buttonCustomFontScaleLarger = (Button) this.findViewById(R.id.buttonCustomFontScaleLarger);
@@ -60,6 +64,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         CheckBox checkBoxCustomTemperatureScale = (CheckBox) this.findViewById(R.id.checkBoxCustomTemperatureScale);
         EditText editTextCustomTemperatureScaleMin = (EditText) this.findViewById(R.id.editTextCustomTemperatureScaleMin);
         EditText editTextCustomTemperatureScaleMax = (EditText) this.findViewById(R.id.editTextCustomTemperatureScaleMax);
+
 
 
         Button buttonWipeDB = (Button) this.findViewById(R.id.buttonWipeDB);
@@ -114,6 +119,19 @@ public class MainSettingsActivity extends AppCompatActivity {
             editTextCustomTemperatureScaleMax.setText("100");
         }
 
+
+        checkBoxCustomFontScale.setEnabled(!use_graph);
+        buttonCustomFontScaleSmaller.setEnabled(!use_graph);
+        buttonCustomFontScaleLarger.setEnabled(!use_graph);
+        textViewCustomFontScale.setEnabled(!use_graph);
+
+        checkBoxCustomTemperatureScale.setEnabled(!use_graph);
+        editTextCustomTemperatureScaleMin.setEnabled(!use_graph);
+        editTextCustomTemperatureScaleMax.setEnabled(!use_graph);
+
+        checkBoxUseGraph.setChecked(use_graph);
+
+
         //response on edit of values
         checkBoxUseDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -165,6 +183,38 @@ public class MainSettingsActivity extends AppCompatActivity {
             }
         });
 
+        checkBoxUseGraph.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean checked = false;
+                if(compoundButton.isChecked()){
+                    checked = true;
+                }
+                SharedPreferences sharedPref = MainSettingsActivity.this.getSharedPreferences(
+                        getString(R.string.shared_pref_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(getString(R.string.setting_use_graph_pref), checked);
+                editor.commit();
+
+                CheckBox checkBoxCustomFontScale = (CheckBox) MainSettingsActivity.this.findViewById(R.id.checkBoxCustomFontScale);
+                Button buttonCustomFontScaleSmaller = (Button) MainSettingsActivity.this.findViewById(R.id.buttonCustomFontScaleSmaller);
+                Button buttonCustomFontScaleLarger = (Button) MainSettingsActivity.this.findViewById(R.id.buttonCustomFontScaleLarger);
+                TextView textViewCustomFontScale = (TextView) MainSettingsActivity.this.findViewById(R.id.textViewCustomFontScale);
+
+                CheckBox checkBoxCustomTemperatureScale = (CheckBox) MainSettingsActivity.this.findViewById(R.id.checkBoxCustomTemperatureScale);
+                EditText editTextCustomTemperatureScaleMin = (EditText) MainSettingsActivity.this.findViewById(R.id.editTextCustomTemperatureScaleMin);
+                EditText editTextCustomTemperatureScaleMax = (EditText) MainSettingsActivity.this.findViewById(R.id.editTextCustomTemperatureScaleMax);
+
+                checkBoxCustomFontScale.setEnabled(!checked);
+                buttonCustomFontScaleSmaller.setEnabled(!checked);
+                buttonCustomFontScaleLarger.setEnabled(!checked);
+                textViewCustomFontScale.setEnabled(!checked);
+
+                checkBoxCustomTemperatureScale.setEnabled(!checked);
+                editTextCustomTemperatureScaleMin.setEnabled(!checked);
+                editTextCustomTemperatureScaleMax.setEnabled(!checked);
+            }
+        });
 
         checkBoxCustomFontScale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

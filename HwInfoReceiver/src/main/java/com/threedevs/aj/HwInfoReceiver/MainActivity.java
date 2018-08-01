@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements ServerDialog.Serv
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(CustomApplication.PREFS_NAME, 0);
         boolean first_run = settings.getBoolean("first_run", true);
-
         int desktop_app_version = settings.getInt("desktop_app_version", 0);
+        boolean app_update_2 = settings.getBoolean("app_update_2", true);
 
         if(first_run == true) {
             Intent si = new Intent(MainActivity.this, IntroActivity.class);
@@ -103,6 +103,17 @@ public class MainActivity extends AppCompatActivity implements ServerDialog.Serv
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("desktop_app_version", 1);
+
+            // Commit the edits!
+            editor.commit();
+        }
+
+        if(app_update_2 == true) {
+            Intent si = new Intent(MainActivity.this, IntroUpdate2Activity.class);
+            MainActivity.this.startActivity(si);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("app_update_2", false);
 
             // Commit the edits!
             editor.commit();
@@ -204,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements ServerDialog.Serv
         ((CustomApplication)getApplication()).setIP(ip);
 
         Intent si = new Intent(MainActivity.this, ServerActivityV2.class);
-        si.putExtra("ip", ip); //Optional parameters
+        si.putExtra("ip", ip);
         MainActivity.this.startActivity(si);
     }
 

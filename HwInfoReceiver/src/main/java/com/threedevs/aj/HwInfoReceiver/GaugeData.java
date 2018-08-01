@@ -34,14 +34,26 @@ public class GaugeData {
 
     private int precision = 5;
 
-    private String name = "";
+    private String name = "loading/long press";
     private String unit = "";
 
+    //colors...
+    public static int color_graph_line = Color.argb(0xFF, 0x4C, 0xAF, 0x50);
+    public static int color_graph_cirlce = Color.argb(0xFF, 0x66, 0xBB, 0x6A);
+    public static int color_graph_fill = Color.argb(0xFF, 0x11, 0xAA, 0x11);
+
+    public static int color_graph_min = Color.argb(0xFF, 0x41, 0x69, 0xE1);
+    public static int color_graph_max = Color.argb(0xFF, 0xB2, 0x22, 0x22);
+    public static int color_graph_cur = Color.argb(0xFF, 0xD4, 0x55, 0x00);
 
     public static final int TYPE_GAUGE = 1;
     public static final int TYPE_GRAPH = 2;
 
     private int type = GaugeData.TYPE_GRAPH;
+
+    //graph data...
+    private ArrayList<Double> values = new ArrayList<Double>();
+    private int max_value_count = 45;
 
     //if it's a gauge
     private CustomGauge gauge_view;
@@ -54,6 +66,7 @@ public class GaugeData {
     private LineChart graph_view;
 
     public GaugeData(){
+
     }
 
     public void updateViews(){
@@ -93,6 +106,7 @@ public class GaugeData {
     }
 
     public void setGraphView(LineChart g){
+        first_value_set = false;
         graph_view = g;
     }
 
@@ -174,31 +188,44 @@ public class GaugeData {
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, name + " " + unit);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColors(Color.GREEN);
-        set.setCircleColor(Color.GREEN);
-        set.setCircleHoleColor(Color.GREEN);
+        set.setColors(color_graph_line);
+        set.setCircleColor(color_graph_line);
+        set.setCircleHoleColor(color_graph_line);
         set.setLineWidth(2f);
         set.setCircleRadius(1f);
-        set.setValueTextColor(Color.WHITE);
+        //set.setValueTextColor(Color.WHITE);
         set.setValueTextSize(10f);
         set.setDrawCircles(true);
         set.setDrawValues(false);
         set.setDrawFilled(true);
-        set.setFillColor(Color.GREEN);
-        set.setFillAlpha(255);
+        set.setFillColor(color_graph_fill);
+        set.setFillAlpha(32);
         return set;
     }
 
     public void setValue(double value){
         value_current = value;
 
+        values.add(value);
+        if(values.size() > max_value_count){
+            values.remove(0);
+        }
+
+        //Log.i("setValue", "value_current: " + value_current);
+
+        if(type == TYPE_GAUGE) { //otherwise graph doesnt get drawn it's first value and max/min
+            if (first_value_set == false) {
+                first_value_set = true;
+                value_max = value;
+                value_min = value;
+                return;
+            }
+        }
+        value_max = Math.max(value_max,value);
+        value_min = Math.min(value_min,value);
+
         if(type == TYPE_GRAPH){
             if(graph_view != null) {
-                // set manual x bounds to have nice steps
-                //graph_view.getViewport().setMinX(dates.get(0).getTime());
-                //graph_view.getViewport().setMaxX(dates.get(dates.size()-1).getTime());
-                //graph_view.getViewport().setXAxisBoundsManual(true);
-
                 LineData data = graph_view.getData();
                 if (data != null) {
                     ILineDataSet set = data.getDataSetByIndex(0);
@@ -208,7 +235,53 @@ public class GaugeData {
                     }
 
                     set.setLabel(name + " " + unit);
+
+                    if (first_value_set == false) {
+                        first_value_set = true;
+
+                        for(int i = 0; i < values.size(); i++){
+                            data.addEntry(new Entry(set.getEntryCount(), values.get(i).floatValue()), 0);
+                        }
+                    }
+
                     data.addEntry(new Entry(set.getEntryCount(), (float)value_current), 0);
+
+
+                    YAxis leftAxis = graph_view.getAxisLeft();
+
+                    leftAxis.setAxisMinimum((float)value_min);
+                    leftAxis.setAxisMaximum((float)value_max);
+
+                    LimitLine llcur = new LimitLine((float)value_current,  (int)value_current + "");
+                    llcur.setLineWidth(1f);
+                    llcur.setLineColor(color_graph_cur);
+                    if(value_max - value_current < value_current - value_min) {
+                        llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+                    }
+                    else{
+                        llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+                    }
+                    llcur.setTextSize(8f);
+                    llcur.setTextColor(color_graph_cur);
+
+                    LimitLine llmin = new LimitLine((float)value_min,  (int)value_min + "");
+                    llmin.setLineWidth(1f);
+                    llmin.setLineColor(color_graph_min);
+                    llmin.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+                    llmin.setTextSize(8f);
+                    llmin.setTextColor(color_graph_min);
+
+                    LimitLine llmax = new LimitLine((float)value_max,  (int)value_max + "");
+                    llmax.setLineWidth(1f);
+                    llmax.setLineColor(color_graph_max);
+                    llmax.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+                    llmax.setTextSize(8f);
+                    llmax.setTextColor(color_graph_max);
+                    // reset all limit lines to avoid overlapping lines
+                    leftAxis.removeAllLimitLines();
+                    leftAxis.addLimitLine(llcur);
+                    leftAxis.addLimitLine(llmin);
+                    leftAxis.addLimitLine(llmax);
 
                     // let the chart know it's data has changed
                     data.notifyDataChanged();
@@ -227,55 +300,6 @@ public class GaugeData {
         if(type == TYPE_GAUGE){
             updateViews();
         }
-
-
-
-        Log.i("setValue", "value_current: " + value_current);
-
-        if(first_value_set == false){
-            first_value_set = true;
-            value_max = value;
-            value_min = value;
-
-            Log.i("setValue", "adding value_series");
-            return;
-        }
-        value_max = Math.max(value_max,value);
-        value_min = Math.min(value_min,value);
-
-        YAxis leftAxis = graph_view.getAxisLeft();
-
-
-        LimitLine llcur = new LimitLine((float)value_current,  (int)value_current + "");
-        llcur.setLineWidth(1f);
-        llcur.setLineColor(Color.WHITE);
-        if(value_max - value_current < value_current - value_min) {
-            llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        }
-        else{
-            llcur.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        }
-        llcur.setTextSize(8f);
-        llcur.setTextColor(Color.WHITE);
-
-        LimitLine llmin = new LimitLine((float)value_min,  (int)value_min + "");
-        llmin.setLineWidth(1f);
-        llmin.setLineColor(Color.BLUE);
-        llmin.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        llmin.setTextSize(8f);
-        llmin.setTextColor(Color.BLUE);
-
-        LimitLine llmax = new LimitLine((float)value_max,  (int)value_max + "");
-        llmax.setLineWidth(1f);
-        llmax.setLineColor(Color.RED);
-        llmax.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
-        llmax.setTextSize(8f);
-        llmax.setTextColor(Color.RED);
-        // reset all limit lines to avoid overlapping lines
-        leftAxis.removeAllLimitLines();
-        leftAxis.addLimitLine(llcur);
-        leftAxis.addLimitLine(llmin);
-        leftAxis.addLimitLine(llmax);
     }
 
     public double getValue(){
@@ -304,6 +328,10 @@ public class GaugeData {
 
     public int getType(){
         return type;
+    }
+
+    public void setType(int type){
+         this.type = type;
     }
 
 }

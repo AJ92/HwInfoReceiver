@@ -44,6 +44,11 @@
     <string name="setting_auto_connect_last_server_pref">auto_connect_last_server_pref</string>
     <string name="setting_last_server_pref">last_server_pref</string>
 
+
+    <string name="setting_use_graph">Use graphs instead of gauges</string>
+    <string name="setting_use_graph_pref">use_graph_perf</string>
+
+
     <string name="setting_custom_font_scale_lbl">Custom font scale</string>
     <string name="setting_custom_font_scale_pref">custom_font_scale_pref</string>
     <string name="setting_custom_font_scale_value_pref">custom_font_scale_value_pref</string>
@@ -131,7 +136,7 @@
 
 
 
-
+    <!-- update -->
     <string name="appupdate_slide_1_title">Update</string>
     <string name="appupdate_slide_1_description">The desktop application received an update! Visit blog.sigsegowl.xyz/?page_id=982 to download it.</string>
 
@@ -140,6 +145,11 @@
 
     <string name="appupdate_slide_3_title">But!</string>
     <string name="appupdate_slide_3_description">You don\'t have to look up any numbers anymore :) Just choose from your phone the sensors you need!</string>
+
+
+    <!-- update with graphs -->
+    <string name="appupdate_2_slide_1_title">Update</string>
+    <string name="appupdate_2_slide_1_description">You can use graphs now! Set the checkbox in settings!</string>
 
 
 

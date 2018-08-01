@@ -43,6 +43,12 @@
                 android:text="@string/setting_auto_connect_last_server" />
 
             <CheckBox
+                android:id="@+id/checkBoxUseGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_use_graph" />
+
+            <CheckBox
                 android:id="@+id/checkBoxCustomFontScale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -21,11 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ServerActivityV2" android:hardwareAccelerated="true" />
+        <activity android:name=".ServerActivityV2" android:hardwareAccelerated="false" />
         <activity android:name=".IntroActivity" />
         <activity android:name=".IntroServerConnectionActivity" />
         <activity android:name=".IntroSensorsActivity" />
         <activity android:name=".IntroUpdateAppActivity" />
+        <activity android:name=".IntroUpdate2Activity" />
         <activity
             android:name=".ApplicationSettingsActivity"
             android:label="@string/title_activity_application_settings" />

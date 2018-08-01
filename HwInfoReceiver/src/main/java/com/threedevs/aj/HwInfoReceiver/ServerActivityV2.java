@@ -234,11 +234,27 @@ public class ServerActivityV2 extends AppCompatActivity{
         //sensor_hash_sensor_id.clear();
         //sensor_hash_sensor_name.clear();
 
+        //get some settings values
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                this.getString(R.string.shared_pref_key),
+                Context.MODE_PRIVATE
+        );
+        boolean use_graph = sharedPref.getBoolean(this.getString(R.string.setting_use_graph_pref), false);
+
+
         for(int i = 0; i < sensors.size(); i++){
             //construct GaugeData and CustomGauge
             GaugeData gd = new GaugeData();
+
+            if(use_graph){
+                gd.setType(GaugeData.TYPE_GRAPH);
+            }
+            else{
+                gd.setType(GaugeData.TYPE_GAUGE);
+            }
+
             //gd.setName("hash: " + sensors.get(i).getHash());
-            gd.setName("Loading...");
+            //gd.setName("Loading...");
             sensor_gaugedatas.add(gd);
 
             sensor_hash_sensor_id.put(sensors.get(i).getHash(), i);
@@ -263,8 +279,6 @@ public class ServerActivityV2 extends AppCompatActivity{
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(gaugeAdapter);
-
-
     }
 
 
@@ -531,8 +545,14 @@ public class ServerActivityV2 extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         if (requestCode == APPLICATION_SETTINGS_REQUEST) {
-            reLoadSensorsFromDataBase();
-            createGridView();
+            //reLoadSensorsFromDataBase();
+            //createGridView();
+
+            //reload this activity...
+            Intent si = new Intent(ServerActivityV2.this, ServerActivityV2.class);
+            si.putExtra("ip", server_ip);
+            ServerActivityV2.this.startActivity(si);
+            finish();
         }
     }
 

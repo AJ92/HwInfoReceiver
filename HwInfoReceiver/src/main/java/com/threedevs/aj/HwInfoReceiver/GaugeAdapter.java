@@ -33,6 +33,9 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final boolean[] gaugeDataFontAdjusted;
     private View.OnCreateContextMenuListener contextMenuListener;
 
+    private static int color_text_bright = Color.argb(0xFF, 0x21, 0x21, 0x21);
+    private static int color_text_dark = Color.argb(0xFF, 0xE0, 0xE0, 0xE0);
+
     public class MyViewHolderGauge extends RecyclerView.ViewHolder {
         public TextView titleTextView;
         public TextView currentTextView;
@@ -109,6 +112,8 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return;
         }
 
+        holder.setIsRecyclable(false);
+
         GaugeData gaugeData = gaugeDatas[position];
 
         String unit = gaugeData.getUnit();
@@ -125,6 +130,8 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         boolean custom_temp_scale = sharedPref.getBoolean(context.getString(R.string.setting_custom_temp_scale_pref), false);
         int custom_temp_scale_min = sharedPref.getInt(context.getString(R.string.setting_custom_temp_scale_min_pref), 0);
         int custom_temp_scale_max = sharedPref.getInt(context.getString(R.string.setting_custom_temp_scale_max_pref), 100);
+
+        boolean dark_theme = sharedPref.getBoolean(context.getString(R.string.setting_use_dark_theme_pref), false);
 
         switch (holder.getItemViewType()) {
             case GaugeData.TYPE_GAUGE: {
@@ -231,9 +238,19 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 gaugeData.setMinTextView(viewHolder.minTextView);
                 gaugeData.setMaxTextView(viewHolder.maxTextView);
 
+                gaugeData.updateViews();
+
                 break;
             }
             case GaugeData.TYPE_GRAPH: {
+                int color_text = 0;
+                if(dark_theme){
+                    color_text = color_text_dark;
+                }
+                else{
+                    color_text = color_text_bright;
+                }
+
                 MyViewHolderGraph viewHolder = (MyViewHolderGraph) holder;
                 //Chart
                 LineChart graph = viewHolder.graph;
@@ -254,19 +271,23 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 //Axes
                 XAxis xl = graph.getXAxis();
-                xl.setTextColor(Color.WHITE);
+                xl.setTextColor(color_text);
                 xl.setDrawGridLines(false);
                 xl.setAvoidFirstLastClipping(true);
                 xl.setEnabled(true);
                 xl.setDrawLabels(false);
                 xl.setDrawAxisLine(true);
                 xl.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+                xl.setAxisLineColor(color_text);
 
                 YAxis leftAxis = graph.getAxisLeft();
-                leftAxis.setTextColor(Color.WHITE);
+                leftAxis.setTextColor(color_text);
+                leftAxis.setZeroLineColor(color_text);
                 leftAxis.setDrawGridLines(false);
                 leftAxis.setDrawZeroLine(true);
+                leftAxis.setAxisLineColor(color_text);
                 leftAxis.setTextSize(7.0f);
+                leftAxis.setLabelCount(5, true);
 
 
                 YAxis rightAxis = graph.getAxisRight();
@@ -287,56 +308,55 @@ public class GaugeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 //legend
                 Legend l = graph.getLegend();
                 l.setForm(Legend.LegendForm.LINE);
-                l.setTextColor(Color.WHITE);
+                l.setTextColor(color_text);
                 l.setEnabled(true);
 
                 //data
                 LineData data = new LineData();
-                data.setValueTextColor(Color.WHITE);
+                data.setValueTextColor(color_text);
                 data.setDrawValues(false);
                 // add empty data
                 graph.setData(data);
                 gaugeData.setGraphView(graph);
 
                 if (unit.equals("%")) {
-                    gaugeData.setValue(0.0f);
-                    gaugeData.setValue(100.0f);
-                    leftAxis.setAxisMaximum(100f);
+                    gaugeData.setValueMin(0.0f);
+                    gaugeData.setValueMax(100.0f);
                 } else if (unit.equals("°C")) {
                     if (custom_temp_scale) {
-                        gaugeData.setValue(custom_temp_scale_min);
-                        gaugeData.setValue(custom_temp_scale_max);
+                        gaugeData.setValueMin(custom_temp_scale_min);
+                        gaugeData.setValueMax(custom_temp_scale_max);
                     } else {
-                        gaugeData.setValue(0.0f);
-                        gaugeData.setValue(100f);
-                        leftAxis.setAxisMaximum(100f);
+                        gaugeData.setValueMin(0.0f);
+                        gaugeData.setValueMax(100f);
                     }
                 } else if (unit.equals("MB")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("V")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("MHz")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("Yes/No")) {
-                    gaugeData.setValue(1.0f);
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMax(1.0f);
+                    gaugeData.setValueMin(0f);
                     //gaugeData.setAutoAdjustScale(true);
                 } else if (unit.equals("W")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("RPM")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("MB/s")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("% of TDP")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("Gbps")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("x")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else if (unit.equals("KB/s")) {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValueMin(0f);
                 } else {
-                    gaugeData.setValue(0f);
+                    gaugeData.setValue(0.0f);
+                    gaugeData.setValueMin(0f);
                 }
 
                 break;

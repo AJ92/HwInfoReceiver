@@ -4,7 +4,7 @@
     android:id="@+id/activity_server_v2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
+    android:scrollbars="none"
     tools:context="com.threedevs.aj.HwInfoReceiver.ServerActivityV2"
     xmlns:android="http://schemas.android.com/apk/res/android" />
 
